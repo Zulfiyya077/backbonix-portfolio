@@ -1,6 +1,6 @@
 // src/components/sections/Portfolio.tsx
 import React, { useState, useEffect } from 'react';
-import { ExternalLink, Calendar, Users, Award, ChevronLeft, ChevronRight, Play, Pause, Target, Briefcase } from 'lucide-react';
+import { Calendar, Users, Award, ChevronLeft, ChevronRight, Play, Pause, Target, Briefcase } from 'lucide-react';
 import type { Language } from '../../types';
 import { translations } from '../../i18n/translations';
 

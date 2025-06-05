@@ -1,6 +1,6 @@
 // src/components/common/Navbar.tsx
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon, Globe } from 'lucide-react';
+import  { useState, useEffect } from 'react';
+import {  Sun, Moon } from 'lucide-react';
 import type { Language } from '../../types';
 import { translations } from '../../i18n/translations';
 

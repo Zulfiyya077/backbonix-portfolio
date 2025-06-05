@@ -1,6 +1,6 @@
 // src/components/sections/VendorExperience.tsx
 import React, { useState, useEffect } from 'react';
-import { Award, Star, Shield, Network, Settings, Trophy, Target, Users, Cpu, Server, Monitor } from 'lucide-react';
+import { Award, Star, Shield, Network, Settings, Trophy, Target, Cpu, Server, Monitor } from 'lucide-react';
 import type { Language } from '../../types';
 import { translations } from '../../i18n/translations';
 

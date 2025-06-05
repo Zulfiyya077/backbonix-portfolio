@@ -407,12 +407,6 @@ body {
 /* Focus styles */
 .focus-ring {
   outline: none;
-  ring: 2px;
-  ring-color: var(--color-primary);
-  ring-offset: 2px;
-  ring-offset-color: white;
+
 }
 
-.dark .focus-ring {
-  ring-offset-color: var(--color-gray-dark);
-}

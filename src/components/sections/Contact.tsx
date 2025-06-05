@@ -150,12 +150,12 @@ ${formData.message}
       id="contact" 
       className="min-h-screen py-20 relative overflow-hidden"
     >
-      {/* Background with animated elements (SAME AS OTHER SECTIONS) */}
+      {/* Background - Portfolio-nun əksi (mirror) */}
       <div className="absolute inset-0">
         <div className={`absolute inset-0 ${
           isDark 
-            ? 'bg-gradient-to-br from-emerald-900/10 via-blue-900/20 to-gray-900' 
-            : 'bg-gradient-to-br from-emerald-50 via-white to-blue-50'
+            ? 'bg-gradient-to-bl from-gray-900 via-blue-900/20 to-emerald-900/10' 
+            : 'bg-gradient-to-bl from-blue-50 via-white to-emerald-50'
         }`} />
         
         {/* Floating background orbs */}
@@ -222,8 +222,8 @@ ${formData.message}
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Contact Form - Compact Design */}
-          <div className={`card-3d p-6 lg:p-8 rounded-2xl transition-all duration-300 hover:scale-105 ${
+          {/* Contact Form - SABİT, HƏRƏKƏT ETMİR */}
+          <div className={`p-6 lg:p-8 rounded-2xl ${
             isDark 
               ? 'glass-effect-dark border border-gray-700/50' 
               : 'glass-effect border border-white/20 shadow-lg'
@@ -399,7 +399,7 @@ ${formData.message}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full btn-modern flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 ${
+                className={`w-full btn-modern flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-semibold text-white transition-all duration-300 ${
                   isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
                 }`}
               >

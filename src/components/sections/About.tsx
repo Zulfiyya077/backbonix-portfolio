@@ -12,6 +12,7 @@ interface AboutProps {
 export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
   const [animatedNumbers, setAnimatedNumbers] = useState<number[]>([]);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [hasAnimated, setHasAnimated] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
 
   const t = translations[currentLang];
@@ -57,7 +58,7 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
     }
   ];
 
-  // Stats with animation
+  // Stats with animation - FIXED: moved outside useEffect
   const stats = [
     { number: 250, suffix: '+', label: currentLang === 'az' ? 'Layihə' : 'Projects', icon: Target },
     { number: 500, suffix: '+', label: currentLang === 'az' ? 'Müştəri' : 'Clients', icon: Users },
@@ -73,12 +74,16 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
     { icon: CheckCircle, size: 'w-4 h-4', position: 'bottom-48 right-32', delay: '1s', color: 'text-green-400' },
   ];
 
-  // Number animation
+  // Number animation - FIXED: proper dependency and one-time animation
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && !hasAnimated) {
+        setHasAnimated(true);
+        
+        // Initialize array with zeros
+        setAnimatedNumbers(new Array(stats.length).fill(0));
+        
         stats.forEach((stat, index) => {
-          let start = 0;
           const duration = 2000;
           const startTime = performance.now();
           
@@ -93,17 +98,25 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
               return newNumbers;
             });
             
-            if (progress < 1) requestAnimationFrame(animate);
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            }
           };
           
-          setTimeout(() => requestAnimationFrame(animate), index * 200);
+          // Start animation with delay for each stat
+          setTimeout(() => {
+            requestAnimationFrame(animate);
+          }, index * 200);
         });
       }
     }, { threshold: 0.3 });
 
-    if (statsRef.current) observer.observe(statsRef.current);
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+    
     return () => observer.disconnect();
-  }, [stats]);
+  }, [hasAnimated]); // Only depend on hasAnimated
 
   return (
     <section 
