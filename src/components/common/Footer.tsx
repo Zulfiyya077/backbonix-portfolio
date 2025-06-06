@@ -16,30 +16,30 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
 
   const footerLinks = [
     {
-      title: currentLang === 'az' ? 'Şirkət' : currentLang === 'en' ? 'Company' : 'Empresa',
+      title: currentLang === 'en' ? 'Company' : currentLang === 'az' ? 'Şirkət' : 'Empresa',
       links: [
         { name: t.nav.about, action: () => onNavigate('about') },
         { name: t.nav.services, action: () => onNavigate('services') },
         { name: t.nav.portfolio, action: () => onNavigate('portfolio') },
-        { name: currentLang === 'az' ? 'Komanda' : currentLang === 'en' ? 'Team' : 'Equipo', action: () => onNavigate('about') }
+        { name: currentLang === 'en' ? 'Team' : currentLang === 'az' ? 'Komanda' : 'Equipo', action: () => onNavigate('about') }
       ]
     },
     {
-      title: currentLang === 'az' ? 'Xidmətlər' : currentLang === 'en' ? 'Services' : 'Servicios',
+      title: currentLang === 'en' ? 'Services' : currentLang === 'az' ? 'Xidmətlər' : 'Servicios',
       links: [
-        { name: currentLang === 'az' ? 'Şəbəkə Təhlükəsizliyi' : currentLang === 'en' ? 'Network Security' : 'Seguridad de Red', action: () => onNavigate('services') },
-        { name: currentLang === 'az' ? 'IT İnfrastruktur' : currentLang === 'en' ? 'IT Infrastructure' : 'Infraestructura IT', action: () => onNavigate('services') },
-        { name: currentLang === 'az' ? 'Video Nəzarət' : currentLang === 'en' ? 'Video Surveillance' : 'Video Vigilancia', action: () => onNavigate('services') },
-        { name: currentLang === 'az' ? 'Şəbəkə Quraşdırılması' : currentLang === 'en' ? 'Network Setup' : 'Configuración de Red', action: () => onNavigate('services') }
+        { name: currentLang === 'en' ? 'Network Security' : currentLang === 'az' ? 'Şəbəkə Təhlükəsizliyi' : 'Seguridad de Red', action: () => onNavigate('services') },
+        { name: currentLang === 'en' ? 'IT Infrastructure' : currentLang === 'az' ? 'IT İnfrastruktur' : 'Infraestructura IT', action: () => onNavigate('services') },
+        { name: currentLang === 'en' ? 'Video Surveillance' : currentLang === 'az' ? 'Video Nəzarət' : 'Video Vigilancia', action: () => onNavigate('services') },
+        { name: currentLang === 'en' ? 'Network Setup' : currentLang === 'az' ? 'Şəbəkə Quraşdırılması' : 'Configuración de Red', action: () => onNavigate('services') }
       ]
     },
     {
-      title: currentLang === 'az' ? 'Dəstək' : currentLang === 'en' ? 'Support' : 'Soporte',
+      title: currentLang === 'en' ? 'Support' : currentLang === 'az' ? 'Dəstək' : 'Soporte',
       links: [
         { name: t.nav.contact, action: () => onNavigate('contact') },
-        { name: currentLang === 'az' ? 'Texniki Dəstək' : currentLang === 'en' ? 'Technical Support' : 'Soporte Técnico', action: () => onNavigate('contact') },
-        { name: currentLang === 'az' ? 'Sual-Cavab' : currentLang === 'en' ? 'FAQ' : 'FAQ', action: () => onNavigate('contact') },
-        { name: currentLang === 'az' ? 'Sənədlər' : currentLang === 'en' ? 'Documentation' : 'Documentación', action: () => onNavigate('contact') }
+        { name: currentLang === 'en' ? 'Technical Support' : currentLang === 'az' ? 'Texniki Dəstək' : 'Soporte Técnico', action: () => onNavigate('contact') },
+        { name: currentLang === 'en' ? 'FAQ' : currentLang === 'az' ? 'Sual-Cavab' : 'FAQ', action: () => onNavigate('contact') },
+        { name: currentLang === 'en' ? 'Documentation' : currentLang === 'az' ? 'Sənədlər' : 'Documentación', action: () => onNavigate('contact') }
       ]
     }
   ];
@@ -128,10 +128,10 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
               <p className={`text-sm leading-relaxed mb-4 ${
                 isDark ? 'text-gray-300' : 'text-gray-600'
               }`}>
-                {currentLang === 'az' 
-                  ? 'Professional IT infrastruktur həlləri ilə biznesinizi gələcəyə hazırlayırıq.'
-                  : currentLang === 'en' 
+                {currentLang === 'en' 
                   ? 'Preparing your business for the future with professional IT infrastructure solutions.'
+                  : currentLang === 'az' 
+                  ? 'Professional IT infrastruktur həlləri ilə biznesinizi gələcəyə hazırlayırıq.'
                   : 'Preparando su negocio para el futuro con soluciones profesionales de infraestructura IT.'
                 }
               </p>
@@ -141,7 +141,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
                 <div className="flex items-center space-x-2">
                   <Phone className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                   <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    +994 55 123 45 67
+                    +1 (555) 123-4567
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -153,7 +153,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
                 <div className="flex items-center space-x-2">
                   <MapPin className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                   <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    Bakı, Azərbaycan
+                    Virginia, USA
                   </span>
                 </div>
               </div>
@@ -193,20 +193,20 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
               <h4 className={`font-semibold mb-1 ${
                 isDark ? 'text-white' : 'text-gray-900'
               }`}>
-                {currentLang === 'az' 
-                  ? 'Yeniliklər üçün abunə olun' 
-                  : currentLang === 'en' 
+                {currentLang === 'en' 
                   ? 'Subscribe for updates' 
+                  : currentLang === 'az' 
+                  ? 'Yeniliklər üçün abunə olun'
                   : 'Suscríbete para actualizaciones'
                 }
               </h4>
               <p className={`text-sm ${
                 isDark ? 'text-gray-300' : 'text-gray-600'
               }`}>
-                {currentLang === 'az' 
-                  ? 'Yeni xidmətlər haqqında məlumat alın' 
-                  : currentLang === 'en' 
+                {currentLang === 'en' 
                   ? 'Get notified about new services' 
+                  : currentLang === 'az' 
+                  ? 'Yeni xidmətlər haqqında məlumat alın'
                   : 'Recibe notificaciones sobre servicios'
                 }
               </p>
@@ -215,7 +215,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
             <div className="flex space-x-2">
               <input
                 type="email"
-                placeholder={currentLang === 'az' ? 'E-mail' : 'Email'}
+                placeholder={currentLang === 'en' ? 'Email' : currentLang === 'az' ? 'E-mail' : 'Email'}
                 className={`px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm ${
                   isDark 
                     ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
@@ -223,7 +223,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
                 }`}
               />
               <button className="bg-gradient-to-r from-blue-600 to-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 flex items-center space-x-1">
-                <span className="text-sm">{currentLang === 'az' ? 'Abunə ol' : currentLang === 'en' ? 'Subscribe' : 'Suscribirse'}</span>
+                <span className="text-sm">{currentLang === 'en' ? 'Subscribe' : currentLang === 'az' ? 'Abunə ol' : 'Suscribirse'}</span>
                 <ExternalLink className="w-3 h-3" />
               </button>
             </div>
@@ -238,10 +238,10 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
               isDark ? 'text-gray-400' : 'text-gray-500'
             }`}>
               © {currentYear} BackBonix. {
-                currentLang === 'az' 
-                  ? 'Bütün hüquqlar qorunur.' 
-                  : currentLang === 'en' 
+                currentLang === 'en' 
                   ? 'All rights reserved.' 
+                  : currentLang === 'az' 
+                  ? 'Bütün hüquqlar qorunur.'
                   : 'Todos los derechos reservados.'
               }
             </div>
@@ -271,14 +271,14 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
                   ? 'text-gray-400 hover:text-white' 
                   : 'text-gray-500 hover:text-gray-900'
               }`}>
-                {currentLang === 'az' ? 'Məxfilik' : currentLang === 'en' ? 'Privacy' : 'Privacidad'}
+                {currentLang === 'en' ? 'Privacy' : currentLang === 'az' ? 'Məxfilik' : 'Privacidad'}
               </button>
               <button className={`text-xs transition-colors duration-200 ${
                 isDark 
                   ? 'text-gray-400 hover:text-white' 
                   : 'text-gray-500 hover:text-gray-900'
               }`}>
-                {currentLang === 'az' ? 'Şərtlər' : currentLang === 'en' ? 'Terms' : 'Términos'}
+                {currentLang === 'en' ? 'Terms' : currentLang === 'az' ? 'Şərtlər' : 'Términos'}
               </button>
             </div>
           </div>

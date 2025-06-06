@@ -23,6 +23,7 @@ const EMAILJS_CONFIG = {
 
 export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -34,6 +35,7 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState(false);
 
   const t = translations[currentLang];
 
@@ -48,6 +50,30 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Visibility observer for box animations - REPEATABLE
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else {
+          // Reset animation when scrolling away
+          setIsVisible(false);
+        }
+      },
+      { 
+        threshold: 0.2,
+        rootMargin: '-10% 0px -10% 0px' // More sensitive detection
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   // Floating IT icons
@@ -122,24 +148,27 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
   const contactInfo = [
     {
       icon: Phone,
-      label: currentLang === 'az' ? 'Telefon' : currentLang === 'en' ? 'Phone' : 'Teléfono',
-      value: '+994 55 123 45 67',
-      href: 'tel:+994551234567',
-      color: 'from-emerald-500 to-teal-600'
+      label: currentLang === 'en' ? 'Phone' : currentLang === 'az' ? 'Telefon' : 'Teléfono',
+      value: '+1 (555) 123-4567',
+      href: 'tel:+15551234567',
+      color: 'from-emerald-500 to-teal-600',
+      animationClass: 'animate-slide-in-right'
     },
     {
       icon: Mail,
       label: 'Email',
       value: 'info@backbonix.com',
       href: 'mailto:info@backbonix.com',
-      color: 'from-blue-500 to-indigo-600'
+      color: 'from-blue-500 to-indigo-600',
+      animationClass: 'animate-scale-in'
     },
     {
       icon: MapPin,
-      label: currentLang === 'az' ? 'Ünvan' : currentLang === 'en' ? 'Address' : 'Dirección',
-      value: 'Bakı, Azərbaycan',
+      label: currentLang === 'en' ? 'Address' : currentLang === 'az' ? 'Ünvan' : 'Dirección',
+      value: 'Virginia, USA',
       href: 'https://maps.google.com',
-      color: 'from-purple-500 to-pink-600'
+      color: 'from-purple-500 to-pink-600',
+      animationClass: 'animate-bounce-in'
     }
   ];
 
@@ -176,9 +205,125 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
 
   return (
     <section 
+      ref={sectionRef}
       id="contact" 
       className="min-h-screen py-20 relative overflow-hidden"
     >
+      {/* Custom CSS for animations */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          
+          @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          
+          @keyframes slideInTop {
+            from { opacity: 0; transform: translateY(-80px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @keyframes slideInBottom {
+            from { opacity: 0; transform: translateY(80px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+          }
+          
+          @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+          }
+          
+          @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @keyframes flipIn {
+            from { opacity: 0; transform: rotateY(-90deg); }
+            to { opacity: 1; transform: rotateY(0); }
+          }
+          
+          @keyframes slideInCenter {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+          }
+          
+          /* Repeatable animations - reset when not visible */
+          .animate-slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-top {
+            animation: slideInTop 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-bottom {
+            animation: slideInBottom 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-scale-in {
+            animation: scaleIn 0.6s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-bounce-in {
+            animation: bounceIn 0.9s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-fade-in-up {
+            animation: fadeInUp 0.7s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-flip-in {
+            animation: flipIn 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-center {
+            animation: slideInCenter 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          /* Reset animations when not visible */
+          .animation-reset {
+            opacity: 0 !important;
+            transform: none !important;
+            animation: none !important;
+          }
+          
+          .animate-with-delay-1 { animation-delay: 0.1s; }
+          .animate-with-delay-2 { animation-delay: 0.2s; }
+          .animate-with-delay-3 { animation-delay: 0.3s; }
+          .animate-with-delay-4 { animation-delay: 0.4s; }
+          .animate-with-delay-5 { animation-delay: 0.5s; }
+          .animate-with-delay-6 { animation-delay: 0.6s; }
+          .animate-with-delay-7 { animation-delay: 0.7s; }
+          .animate-with-delay-8 { animation-delay: 0.8s; }
+          .animate-with-delay-9 { animation-delay: 0.9s; }
+          .animate-with-delay-10 { animation-delay: 1.0s; }
+        `
+      }} />
+
       {/* Background - Portfolio-nun əksi (mirror) */}
       <div className="absolute inset-0">
         <div className={`absolute inset-0 ${
@@ -239,32 +384,36 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
         <div className="text-center mb-12">
           <h2 className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-4 ${
             isDark ? 'text-white' : 'text-gray-900'
-          }`}>
+          } ${isVisible ? 'animate-fade-in-up animate-with-delay-1' : 'animation-reset'}`}>
             <span className="text-gradient-animated">
               {t.contact.title}
             </span>
           </h2>
-          <p className="text-lg sm:text-xl md:text-2xl font-medium text-gradient-blue-green mb-6">
+          <p className={`text-lg sm:text-xl md:text-2xl font-medium text-gradient-blue-green mb-6 ${
+            isVisible ? 'animate-fade-in-up animate-with-delay-2' : 'animation-reset'
+          }`}>
             {t.contact.subtitle}
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-emerald-600 mx-auto rounded-full" />
+          <div className={`w-24 h-1 bg-gradient-to-r from-blue-600 to-emerald-600 mx-auto rounded-full ${
+            isVisible ? 'animate-scale-in animate-with-delay-3' : 'animation-reset'
+          }`} />
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Contact Form - SABİT, HƏRƏKƏT ETMİR */}
+          {/* Contact Form - Animated */}
           <div className={`p-6 lg:p-8 rounded-2xl ${
             isDark 
               ? 'glass-effect-dark border border-gray-700/50' 
               : 'glass-effect border border-white/20 shadow-lg'
-          }`}>
+          } ${isVisible ? 'animate-slide-in-left animate-with-delay-4' : 'animation-reset'}`}>
             <div className="mb-6">
               <h3 className={`text-xl font-bold mb-2 ${
                 isDark ? 'text-white' : 'text-gray-900'
               }`}>
-                {currentLang === 'az' ? 'Bizə Yazın' : currentLang === 'en' ? 'Write to Us' : 'Escríbenos'}
+                {currentLang === 'en' ? 'Write to Us' : currentLang === 'az' ? 'Bizə Yazın' : 'Escríbenos'}
               </h3>
               <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                {currentLang === 'az' ? 'Tezliklə əlaqə saxlayacağıq' : currentLang === 'en' ? 'We will contact you soon' : 'Te contactaremos pronto'}
+                {currentLang === 'en' ? 'We will contact you soon' : currentLang === 'az' ? 'Tezliklə əlaqə saxlayacağıq' : 'Te contactaremos pronto'}
               </p>
             </div>
 
@@ -297,7 +446,7 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
                           ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
                           : 'bg-white/70 border-gray-300 text-gray-900 placeholder-gray-500'
                       }`}
-                      placeholder={currentLang === 'az' ? 'Adınız' : currentLang === 'en' ? 'Your name' : 'Tu nombre'}
+                      placeholder={currentLang === 'en' ? 'Your name' : currentLang === 'az' ? 'Adınız' : 'Tu nombre'}
                     />
                   </div>
                 </div>
@@ -361,7 +510,7 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
                           ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
                           : 'bg-white/70 border-gray-300 text-gray-900 placeholder-gray-500'
                       }`}
-                      placeholder={currentLang === 'az' ? 'Telefon' : currentLang === 'en' ? 'Phone' : 'Teléfono'}
+                      placeholder={currentLang === 'en' ? 'Phone' : currentLang === 'az' ? 'Telefon' : 'Teléfono'}
                     />
                   </div>
                 </div>
@@ -391,7 +540,7 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
                           ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
                           : 'bg-white/70 border-gray-300 text-gray-900 placeholder-gray-500'
                       }`}
-                      placeholder={currentLang === 'az' ? 'Şirkət' : currentLang === 'en' ? 'Company' : 'Empresa'}
+                      placeholder={currentLang === 'en' ? 'Company' : currentLang === 'az' ? 'Şirkət' : 'Empresa'}
                     />
                   </div>
                 </div>
@@ -424,7 +573,7 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
                         ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
                         : 'bg-white/70 border-gray-300 text-gray-900 placeholder-gray-500'
                     }`}
-                    placeholder={currentLang === 'az' ? 'Mesajınız...' : currentLang === 'en' ? 'Your message...' : 'Tu mensaje...'}
+                    placeholder={currentLang === 'en' ? 'Your message...' : currentLang === 'az' ? 'Mesajınız...' : 'Tu mensaje...'}
                   />
                 </div>
               </div>
@@ -469,7 +618,7 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
             </form>
           </div>
 
-          {/* Contact Information */}
+          {/* Contact Information - Animated */}
           <div className="space-y-6">
             {/* Contact Cards */}
             <div className="space-y-4">
@@ -481,7 +630,7 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
                     isDark 
                       ? 'glass-effect-dark border border-gray-700/50' 
                       : 'glass-effect border border-white/20 shadow-lg'
-                  }`}
+                  } ${isVisible ? `${info.animationClass} animate-with-delay-${index + 5}` : 'animation-reset'}`}
                 >
                   <div className="flex items-center space-x-4">
                     <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${info.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
@@ -507,17 +656,17 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
               ))}
             </div>
 
-            {/* Social Media Links - Modern Icons */}
+            {/* Social Media Links - Animated */}
             <div className={`p-4 rounded-xl ${
               isDark 
                 ? 'glass-effect-dark border border-gray-700/50' 
                 : 'glass-effect border border-white/20 shadow-lg'
-            }`}>
+            } ${isVisible ? 'animate-flip-in animate-with-delay-8' : 'animation-reset'}`}>
               <h3 className={`font-bold mb-3 flex items-center ${
                 isDark ? 'text-white' : 'text-gray-900'
               }`}>
                 <Globe className="w-5 h-5 mr-2 text-blue-500" />
-                {currentLang === 'az' ? 'Sosial Şəbəkələr' : currentLang === 'en' ? 'Social Media' : 'Redes Sociales'}
+                {currentLang === 'en' ? 'Social Media' : currentLang === 'az' ? 'Sosial Şəbəkələr' : 'Redes Sociales'}
               </h3>
               <div className="grid grid-cols-2 gap-2">
                 {socialLinks.map((social, index) => (
@@ -533,53 +682,53 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
               </div>
             </div>
 
-            {/* Business Hours Compact */}
+            {/* Business Hours Compact - Animated */}
             <div className={`p-4 rounded-xl ${
               isDark 
                 ? 'glass-effect-dark border border-gray-700/50' 
                 : 'glass-effect border border-white/20 shadow-lg'
-            }`}>
+            } ${isVisible ? 'animate-slide-in-bottom animate-with-delay-9' : 'animation-reset'}`}>
               <div className="flex items-center mb-3">
                 <Clock className={`w-5 h-5 mr-2 ${isDark ? 'text-emerald-400' : 'text-emerald-500'}`} />
                 <h3 className={`font-bold ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>
-                  {currentLang === 'az' ? 'İş Saatları' : currentLang === 'en' ? 'Business Hours' : 'Horario de Trabajo'}
+                  {currentLang === 'en' ? 'Business Hours' : currentLang === 'az' ? 'İş Saatları' : 'Horario de Trabajo'}
                 </h3>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className={isDark ? 'text-gray-300' : 'text-gray-600'}>
-                    {currentLang === 'az' ? 'B.e - Cümə' : currentLang === 'en' ? 'Mon - Fri' : 'Lun - Vie'}
+                    {currentLang === 'en' ? 'Mon - Fri' : currentLang === 'az' ? 'B.e - Cümə' : 'Lun - Vie'}
                   </span>
                   <span className={isDark ? 'text-white' : 'text-gray-900'}>09:00 - 18:00</span>
                 </div>
                 <div className="flex justify-between">
                   <span className={isDark ? 'text-gray-300' : 'text-gray-600'}>
-                    {currentLang === 'az' ? 'Şənbə' : currentLang === 'en' ? 'Saturday' : 'Sábado'}
+                    {currentLang === 'en' ? 'Saturday' : currentLang === 'az' ? 'Şənbə' : 'Sábado'}
                   </span>
                   <span className={isDark ? 'text-white' : 'text-gray-900'}>09:00 - 14:00</span>
                 </div>
               </div>
             </div>
 
-            {/* Quick Contact CTA */}
+            {/* Quick Contact CTA - Animated */}
             <div className={`p-4 rounded-xl text-center ${
               isDark 
                 ? 'bg-gradient-to-r from-blue-900/50 to-emerald-900/50 border border-blue-500/20' 
                 : 'bg-gradient-to-r from-blue-50 to-emerald-50 border border-blue-200'
-            }`}>
+            } ${isVisible ? 'animate-slide-in-center animate-with-delay-10' : 'animation-reset'}`}>
               <h3 className={`font-bold mb-2 ${
                 isDark ? 'text-white' : 'text-gray-900'
               }`}>
-                {currentLang === 'az' ? 'Təcili Dəstək' : currentLang === 'en' ? 'Urgent Support' : 'Soporte Urgente'}
+                {currentLang === 'en' ? 'Urgent Support' : currentLang === 'az' ? 'Təcili Dəstək' : 'Soporte Urgente'}
               </h3>
               <a
-                href="tel:+994551234567"
+                href="tel:+15551234567"
                 className="btn-modern inline-flex items-center space-x-2 px-4 py-2 text-white rounded-lg font-semibold"
               >
                 <Phone className="w-4 h-4" />
-                <span>{currentLang === 'az' ? 'Zəng Et' : currentLang === 'en' ? 'Call Now' : 'Llamar'}</span>
+                <span>{currentLang === 'en' ? 'Call Now' : currentLang === 'az' ? 'Zəng Et' : 'Llamar'}</span>
               </a>
             </div>
           </div>

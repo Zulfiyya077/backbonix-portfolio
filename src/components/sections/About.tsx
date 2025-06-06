@@ -13,7 +13,9 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
   const [animatedNumbers, setAnimatedNumbers] = useState<number[]>([]);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const t = translations[currentLang];
 
@@ -30,40 +32,92 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Visibility observer for box animations - REPEATABLE
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else {
+          // Reset animation when scrolling away
+          setIsVisible(false);
+        }
+      },
+      { 
+        threshold: 0.2,
+        rootMargin: '-10% 0px -10% 0px' // More sensitive detection
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   // Features with Hero-style design
   const features = [
     {
       icon: Users,
       title: currentLang === 'az' ? 'Peşəkar Komanda' : currentLang === 'en' ? 'Expert Team' : 'Equipo Experto',
       description: currentLang === 'az' ? '10+ il təcrübə' : currentLang === 'en' ? '10+ years experience' : '10+ años experiencia',
-      color: 'from-blue-500 to-cyan-600'
+      color: 'from-blue-500 to-cyan-600',
+      animationClass: 'animate-slide-in-left'
     },
     {
       icon: Award,
       title: currentLang === 'az' ? 'Keyfiyyət' : currentLang === 'en' ? 'Quality' : 'Calidad',
       description: currentLang === 'az' ? '100% zəmanət' : currentLang === 'en' ? '100% guarantee' : '100% garantía',
-      color: 'from-emerald-500 to-teal-600'
+      color: 'from-emerald-500 to-teal-600',
+      animationClass: 'animate-slide-in-right'
     },
     {
       icon: Clock,
       title: currentLang === 'az' ? '24/7 Dəstək' : currentLang === 'en' ? '24/7 Support' : 'Soporte 24/7',
       description: currentLang === 'az' ? 'Həmişə hazırıq' : currentLang === 'en' ? 'Always ready' : 'Siempre listos',
-      color: 'from-indigo-500 to-purple-600'
+      color: 'from-indigo-500 to-purple-600',
+      animationClass: 'animate-slide-in-bottom'
     },
     {
       icon: Shield,
       title: currentLang === 'az' ? 'Etibarlılıq' : currentLang === 'en' ? 'Reliability' : 'Confiabilidad',
       description: currentLang === 'az' ? 'Güvənli həllər' : currentLang === 'en' ? 'Secure solutions' : 'Soluciones seguras',
-      color: 'from-purple-500 to-pink-600'
+      color: 'from-purple-500 to-pink-600',
+      animationClass: 'animate-slide-in-top'
     }
   ];
 
   // Stats with animation - FIXED: moved outside useEffect
   const stats = [
-    { number: 250, suffix: '+', label: currentLang === 'az' ? 'Layihə' : 'Projects', icon: Target },
-    { number: 500, suffix: '+', label: currentLang === 'az' ? 'Müştəri' : 'Clients', icon: Users },
-    { number: 24, suffix: '/7', label: currentLang === 'az' ? 'Dəstək' : 'Support', icon: Clock },
-    { number: 10, suffix: '+', label: currentLang === 'az' ? 'İl' : 'Years', icon: Award }
+    { 
+      number: 250, 
+      suffix: '+', 
+      label: currentLang === 'az' ? 'Layihə' : 'Projects', 
+      icon: Target,
+      animationClass: 'animate-scale-in'
+    },
+    { 
+      number: 500, 
+      suffix: '+', 
+      label: currentLang === 'az' ? 'Müştəri' : 'Clients', 
+      icon: Users,
+      animationClass: 'animate-slide-in-right'
+    },
+    { 
+      number: 24, 
+      suffix: '/7', 
+      label: currentLang === 'az' ? 'Dəstək' : 'Support', 
+      icon: Clock,
+      animationClass: 'animate-bounce-in'
+    },
+    { 
+      number: 10, 
+      suffix: '+', 
+      label: currentLang === 'az' ? 'İl' : 'Years', 
+      icon: Award,
+      animationClass: 'animate-fade-in-up'
+    }
   ];
 
   // Floating IT icons (like Hero)
@@ -74,7 +128,7 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
     { icon: CheckCircle, size: 'w-4 h-4', position: 'bottom-48 right-32', delay: '1s', color: 'text-green-400' },
   ];
 
-  // Number animation - FIXED: proper dependency and one-time animation
+  // Number animation - REPEATABLE: reset hasAnimated when leaving section
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && !hasAnimated) {
@@ -108,21 +162,119 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
             requestAnimationFrame(animate);
           }, index * 200);
         });
+      } else if (!entry.isIntersecting) {
+        // Reset animation when scrolling away
+        setHasAnimated(false);
+        setAnimatedNumbers(new Array(stats.length).fill(0));
       }
-    }, { threshold: 0.3 });
+    }, { 
+      threshold: 0.3,
+      rootMargin: '-10% 0px -10% 0px'
+    });
 
     if (statsRef.current) {
       observer.observe(statsRef.current);
     }
     
     return () => observer.disconnect();
-  }, [hasAnimated]); // Only depend on hasAnimated
+  }, []); // Remove hasAnimated dependency to allow reset
 
   return (
     <section 
+      ref={sectionRef}
       id="about" 
       className="min-h-screen py-20 relative overflow-hidden"
     >
+      {/* Custom CSS for animations */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          
+          @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          
+          @keyframes slideInTop {
+            from { opacity: 0; transform: translateY(-80px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @keyframes slideInBottom {
+            from { opacity: 0; transform: translateY(80px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+          }
+          
+          @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+          }
+          
+          @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          /* Repeatable animations - reset when not visible */
+          .animate-slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-top {
+            animation: slideInTop 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-bottom {
+            animation: slideInBottom 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-scale-in {
+            animation: scaleIn 0.6s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-bounce-in {
+            animation: bounceIn 0.9s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-fade-in-up {
+            animation: fadeInUp 0.7s ease-out forwards;
+            opacity: 0;
+          }
+          
+          /* Reset animations when not visible */
+          .animation-reset {
+            opacity: 0 !important;
+            transform: none !important;
+            animation: none !important;
+          }
+          
+          .animate-with-delay-1 { animation-delay: 0.1s; }
+          .animate-with-delay-2 { animation-delay: 0.2s; }
+          .animate-with-delay-3 { animation-delay: 0.3s; }
+          .animate-with-delay-4 { animation-delay: 0.4s; }
+          .animate-with-delay-5 { animation-delay: 0.5s; }
+        `
+      }} />
+
       {/* Background with animated elements (SAME AS HERO) */}
       <div className="absolute inset-0">
         <div className={`absolute inset-0 ${
@@ -186,15 +338,19 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
           <div className="text-center mb-12">
             <h2 className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-4 ${
               isDark ? 'text-white' : 'text-gray-900'
-            }`}>
+            } ${isVisible ? 'animate-fade-in-up animate-with-delay-1' : 'animation-reset'}`}>
               <span className="text-gradient-animated">
                 {t.about.title}
               </span>
             </h2>
-            <p className="text-lg sm:text-xl md:text-2xl font-medium text-gradient-blue-green mb-6">
+            <p className={`text-lg sm:text-xl md:text-2xl font-medium text-gradient-blue-green mb-6 ${
+              isVisible ? 'animate-fade-in-up animate-with-delay-2' : 'animation-reset'
+            }`}>
               {t.about.subtitle}
             </p>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-emerald-600 mx-auto rounded-full" />
+            <div className={`w-24 h-1 bg-gradient-to-r from-blue-600 to-emerald-600 mx-auto rounded-full ${
+              isVisible ? 'animate-scale-in animate-with-delay-3' : 'animation-reset'
+            }`} />
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -203,7 +359,7 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
             <div className="space-y-8">
               <p className={`text-lg md:text-xl leading-relaxed ${
                 isDark ? 'text-gray-300' : 'text-gray-600'
-              }`}>
+              } ${isVisible ? 'animate-slide-in-left animate-with-delay-2' : 'animation-reset'}`}>
                 {t.about.description}
               </p>
 
@@ -216,7 +372,7 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
                       isDark 
                         ? 'glass-effect-dark border border-gray-700/50' 
                         : 'glass-effect border border-white/20 shadow-lg'
-                    }`}
+                    } ${isVisible ? `${feature.animationClass} animate-with-delay-${index + 3}` : 'animation-reset'}`}
                   >
                     <div className={`w-10 h-10 sm:w-12 sm:h-12 mb-3 rounded-lg bg-gradient-to-r ${feature.color} flex items-center justify-center shadow-lg`}>
                       <feature.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -248,7 +404,7 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
                       isDark 
                         ? 'glass-effect-dark border border-gray-700/50' 
                         : 'glass-effect border border-white/20 shadow-lg'
-                    }`}
+                    } ${isVisible ? `${stat.animationClass} animate-with-delay-${index + 2}` : 'animation-reset'}`}
                   >
                     <div className={`w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-3 rounded-lg bg-gradient-to-r from-blue-500 to-emerald-500 flex items-center justify-center`}>
                       <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
@@ -270,7 +426,7 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
                 isDark 
                   ? 'glass-effect-dark border border-gray-700/50' 
                   : 'glass-effect border border-white/20 shadow-lg'
-              }`}>
+              } ${isVisible ? 'animate-scale-in animate-with-delay-5' : 'animation-reset'}`}>
                 <Network className={`w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 ${
                   isDark ? 'text-gray-400' : 'text-gray-500'
                 } transition-all duration-300 hover:scale-110`} />

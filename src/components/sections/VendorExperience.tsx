@@ -1,5 +1,5 @@
 // src/components/sections/VendorExperience.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Award, Star, Shield, Network, Settings, Trophy, Target, Cpu, Server, Monitor } from 'lucide-react';
 import type { Language } from '../../types';
 import { translations } from '../../i18n/translations';
@@ -14,6 +14,8 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
   isDark 
 }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const t = translations[currentLang];
 
@@ -30,6 +32,30 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Visibility observer for box animations - REPEATABLE
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else {
+          // Reset animation when scrolling away
+          setIsVisible(false);
+        }
+      },
+      { 
+        threshold: 0.2,
+        rootMargin: '-10% 0px -10% 0px' // More sensitive detection
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   // Floating IT icons (same style as Hero)
   const floatingIcons = [
     { icon: Trophy, size: 'w-5 h-5', position: 'top-20 left-16', delay: '0s', color: 'text-yellow-400' },
@@ -39,77 +65,280 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
     { icon: Monitor, size: 'w-6 h-6', position: 'top-48 left-32', delay: '2.5s', color: 'text-cyan-400' },
   ];
 
+  // Vendor SVG Logos
+  const FortinetLogo = () => (
+    <svg viewBox="0 0 100 40" className="w-full h-full">
+      <rect x="5" y="15" width="90" height="10" fill="#E31E24" rx="2"/>
+      <text x="50" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">FORTINET</text>
+      <circle cx="15" cy="8" r="3" fill="#E31E24"/>
+      <circle cx="25" cy="8" r="3" fill="#E31E24"/>
+      <circle cx="35" cy="8" r="3" fill="#E31E24"/>
+    </svg>
+  );
+
+  const CiscoLogo = () => (
+    <svg viewBox="0 0 100 40" className="w-full h-full">
+      <text x="50" y="25" textAnchor="middle" fill="#1BA0D7" fontSize="12" fontWeight="bold">cisco</text>
+      <g fill="#1BA0D7">
+        <rect x="10" y="5" width="2" height="8"/>
+        <rect x="15" y="3" width="2" height="12"/>
+        <rect x="20" y="2" width="2" height="14"/>
+        <rect x="25" y="4" width="2" height="10"/>
+        <rect x="73" y="4" width="2" height="10"/>
+        <rect x="78" y="2" width="2" height="14"/>
+        <rect x="83" y="3" width="2" height="12"/>
+        <rect x="88" y="5" width="2" height="8"/>
+      </g>
+    </svg>
+  );
+
+  const ArubaLogo = () => (
+    <svg viewBox="0 0 100 40" className="w-full h-full">
+      <circle cx="20" cy="20" r="12" fill="#FF6900"/>
+      <path d="M25 15 L35 25 L30 25 L25 20 L20 25 L15 25 Z" fill="#FF6900"/>
+      <text x="55" y="25" textAnchor="middle" fill="#FF6900" fontSize="10" fontWeight="bold">aruba</text>
+    </svg>
+  );
+
+  const HPLogo = () => (
+    <svg viewBox="0 0 100 40" className="w-full h-full">
+      <circle cx="50" cy="20" r="18" fill="#0096D6"/>
+      <text x="50" y="28" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">hp</text>
+    </svg>
+  );
+
+  const TPLinkLogo = () => (
+    <svg viewBox="0 0 100 40" className="w-full h-full">
+      <rect x="5" y="12" width="90" height="16" fill="#4CAF50" rx="8"/>
+      <text x="50" y="23" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">TP-LINK</text>
+      <circle cx="20" cy="8" r="2" fill="#4CAF50"/>
+      <circle cx="30" cy="8" r="2" fill="#4CAF50"/>
+      <circle cx="40" cy="8" r="2" fill="#4CAF50"/>
+      <path d="M15 32 Q50 28 85 32" stroke="#4CAF50" strokeWidth="2" fill="none"/>
+    </svg>
+  );
+
+  const JuniperLogo = () => (
+    <svg viewBox="0 0 100 40" className="w-full h-full">
+      <rect x="10" y="10" width="80" height="20" fill="#84BD00" rx="10"/>
+      <text x="50" y="23" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">JUNIPER</text>
+      <path d="M20 5 L25 10 L20 15 L15 10 Z" fill="#84BD00"/>
+      <path d="M80 5 L85 10 L80 15 L75 10 Z" fill="#84BD00"/>
+    </svg>
+  );
+
+  const HuaweiLogo = () => (
+    <svg viewBox="0 0 100 40" className="w-full h-full">
+      <circle cx="50" cy="20" r="16" fill="#FF0000"/>
+      <path d="M40 12 Q50 8 60 12 Q50 16 40 12" fill="white"/>
+      <path d="M40 28 Q50 32 60 28 Q50 24 40 28" fill="white"/>
+      <text x="50" y="24" textAnchor="middle" fill="white" fontSize="6" fontWeight="bold">HUAWEI</text>
+    </svg>
+  );
+
   const vendors = [
     { 
       name: 'Fortinet', 
-      logo: 'FORTINET',
-      description: currentLang === 'az' ? 'Şəbəkə təhlükəsizliyi' : currentLang === 'en' ? 'Network Security' : 'Seguridad de Red',
-      color: 'from-red-500 to-red-600'
+      logo: <img src="https://exceldisc.com/_next/image?url=https%3A%2F%2Fapiv2.exceldisc.com%2Fmedia%2F135327%2FFortinet-logo.png&w=3840&q=75" alt="Fortinet" className="w-full h-full object-contain" />,
+      description: currentLang === 'en' ? 'Network Security' : currentLang === 'az' ? 'Şəbəkə təhlükəsizliyi' : 'Seguridad de Red',
+      color: 'from-red-500 to-red-600',
+      animationClass: 'animate-slide-in-left'
     },
     { 
       name: 'Cisco', 
-      logo: 'CISCO',
-      description: currentLang === 'az' ? 'Şəbəkə infrastrukturu' : currentLang === 'en' ? 'Network Infrastructure' : 'Infraestructura de Red',
-      color: 'from-blue-500 to-blue-600'
+      logo: <img src="https://brandlogos.net/wp-content/uploads/2021/11/cisco_systems-logo.png" alt="Cisco" className="w-full h-full object-contain" />,
+      description: currentLang === 'en' ? 'Network Infrastructure' : currentLang === 'az' ? 'Şəbəkə infrastrukturu' : 'Infraestructura de Red',
+      color: 'from-blue-500 to-blue-600',
+      animationClass: 'animate-slide-in-top'
     },
     { 
       name: 'Aruba', 
-      logo: 'ARUBA',
-      description: currentLang === 'az' ? 'Simsiz həllər' : currentLang === 'en' ? 'Wireless Solutions' : 'Soluciones Inalámbricas',
-      color: 'from-orange-500 to-orange-600'
+      logo: <img src="https://www.svgrepo.com/show/354803/aruba.svg" alt="Aruba" className="w-full h-full object-contain" />,
+      description: currentLang === 'en' ? 'Wireless Solutions' : currentLang === 'az' ? 'Simsiz həllər' : 'Soluciones Inalámbricas',
+      color: 'from-orange-500 to-orange-600',
+      animationClass: 'animate-bounce-in'
     },
     { 
       name: 'HP', 
-      logo: 'HP',
-      description: currentLang === 'az' ? 'Server və şəbəkə' : currentLang === 'en' ? 'Server & Network' : 'Servidor y Red',
-      color: 'from-indigo-500 to-indigo-600'
+      logo: <img src="https://upload.wikimedia.org/wikipedia/commons/4/43/HP_logo_2008.svg" alt="HP" className="w-full h-full object-contain" />,
+      description: currentLang === 'en' ? 'Server & Network' : currentLang === 'az' ? 'Server və şəbəkə' : 'Servidor y Red',
+      color: 'from-indigo-500 to-indigo-600',
+      animationClass: 'animate-scale-in'
     },
     { 
       name: 'TP-Link', 
-      logo: 'TP-LINK',
-      description: currentLang === 'az' ? 'Şəbəkə avadanlıqları' : currentLang === 'en' ? 'Network Equipment' : 'Equipos de Red',
-      color: 'from-green-500 to-green-600'
+      logo: <img src="https://brandlogos.net/wp-content/uploads/2020/12/tp-link-logo-300x300.png" alt="TP-Link" className="w-full h-full object-contain" />,
+      description: currentLang === 'en' ? 'Network Equipment' : currentLang === 'az' ? 'Şəbəkə avadanlıqları' : 'Equipos de Red',
+      color: 'from-green-500 to-green-600',
+      animationClass: 'animate-slide-in-right'
     },
     { 
       name: 'Juniper', 
-      logo: 'JUNIPER',
-      description: currentLang === 'az' ? 'Korporativ şəbəkə' : currentLang === 'en' ? 'Enterprise Network' : 'Red Empresarial',
-      color: 'from-teal-500 to-teal-600'
+      logo: <img src="https://cdn.freebiesupply.com/logos/thumbs/1x/juniper-networks-logo.png" alt="Juniper" className="w-full h-full object-contain" />,
+      description: currentLang === 'en' ? 'Enterprise Network' : currentLang === 'az' ? 'Korporativ şəbəkə' : 'Red Empresarial',
+      color: 'from-teal-500 to-teal-600',
+      animationClass: 'animate-rotate-in'
     },
     { 
       name: 'Huawei', 
-      logo: 'HUAWEI',
-      description: currentLang === 'az' ? 'Telekom həlləri' : currentLang === 'en' ? 'Telecom Solutions' : 'Soluciones de Telecomunicaciones',
-      color: 'from-purple-500 to-purple-600'
+      logo: <img src="https://icon2.cleanpng.com/20180920/aib/kisspng-logo-huawei-169126-network-2311cxh-bc2mfgec-sm212-huawei-logo-vector-ai-svg-eps-pdf-free-graphic-1713938787603.webp" alt="Huawei" className="w-full h-full object-contain" />,
+      description: currentLang === 'en' ? 'Telecom Solutions' : currentLang === 'az' ? 'Telekom həlləri' : 'Soluciones de Telecomunicaciones',
+      color: 'from-purple-500 to-purple-600',
+      animationClass: 'animate-fade-in-up'
     }
   ];
 
   const features = [
     {
-      icon: Award,
-      title: currentLang === 'az' ? 'Sertifikatlaşmış Mütəxəssislər' : currentLang === 'en' ? 'Certified Specialists' : 'Especialistas Certificados',
-      description: currentLang === 'az' ? 'Hər vendor üzrə sertifikatlaşmış mühəndislər' : currentLang === 'en' ? 'Certified engineers for each vendor' : 'Ingenieros certificados para cada proveedor',
-      color: 'from-yellow-500 to-yellow-600'
-    },
-    {
-      icon: Shield,
-      title: currentLang === 'az' ? 'Geniş Təcrübə' : currentLang === 'en' ? 'Extensive Experience' : 'Amplia Experiencia',
-      description: currentLang === 'az' ? '10+ il müxtəlif vendor məhsulları ilə işləmə təcrübəsi' : currentLang === 'en' ? '10+ years experience with various vendor products' : '10+ años de experiencia con productos de varios proveedores',
-      color: 'from-blue-500 to-blue-600'
-    },
-    {
       icon: Settings,
-      title: currentLang === 'az' ? 'Davamlı Dəstək' : currentLang === 'en' ? 'Continuous Support' : 'Soporte Continuo',
-      description: currentLang === 'az' ? 'Quraşdırılmadan sonra davamlı texniki dəstək' : currentLang === 'en' ? 'Continuous technical support after installation' : 'Soporte técnico continuo después de la instalación',
-      color: 'from-green-500 to-green-600'
+      title: currentLang === 'en' ? 'Continuous Support' : currentLang === 'az' ? 'Davamlı Dəstək' : 'Soporte Continuo',
+      description: currentLang === 'en' ? 'Continuous technical support after installation' : currentLang === 'az' ? 'Quraşdırılmadan sonra davamlı texniki dəstək' : 'Soporte técnico continuo después de la instalación',
+      color: 'from-green-500 to-green-600',
+      animationClass: 'animate-scale-in'
+    }
+  ];
+
+  const stats = [
+    {
+      number: '50+',
+      label: currentLang === 'en' ? 'Projects' : currentLang === 'az' ? 'Layihə' : 'Proyectos',
+      icon: Target,
+      animationClass: 'animate-bounce-in'
+    },
+    {
+      number: '24/7',
+      label: currentLang === 'en' ? 'Support' : currentLang === 'az' ? 'Dəstək' : 'Soporte',
+      icon: Settings,
+      animationClass: 'animate-scale-in'
     }
   ];
 
   return (
     <section 
+      ref={sectionRef}
       id="vendors" 
       className="py-20 relative overflow-hidden"
     >
+      {/* Custom CSS for animations */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          
+          @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          
+          @keyframes slideInTop {
+            from { opacity: 0; transform: translateY(-80px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @keyframes slideInBottom {
+            from { opacity: 0; transform: translateY(80px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+          }
+          
+          @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+          }
+          
+          @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @keyframes rotateIn {
+            from { opacity: 0; transform: rotate(-180deg) scale(0.5); }
+            to { opacity: 1; transform: rotate(0deg) scale(1); }
+          }
+          
+          @keyframes flipIn {
+            from { opacity: 0; transform: rotateY(-90deg); }
+            to { opacity: 1; transform: rotateY(0); }
+          }
+          
+          /* Repeatable animations - reset when not visible */
+          .animate-slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-top {
+            animation: slideInTop 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-slide-in-bottom {
+            animation: slideInBottom 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-scale-in {
+            animation: scaleIn 0.6s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-bounce-in {
+            animation: bounceIn 0.9s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-fade-in-up {
+            animation: fadeInUp 0.7s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-rotate-in {
+            animation: rotateIn 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          .animate-flip-in {
+            animation: flipIn 0.8s ease-out forwards;
+            opacity: 0;
+          }
+          
+          /* Reset animations when not visible */
+          .animation-reset {
+            opacity: 0 !important;
+            transform: none !important;
+            animation: none !important;
+          }
+          
+          .animate-with-delay-1 { animation-delay: 0.1s; }
+          .animate-with-delay-2 { animation-delay: 0.2s; }
+          .animate-with-delay-3 { animation-delay: 0.3s; }
+          .animate-with-delay-4 { animation-delay: 0.4s; }
+          .animate-with-delay-5 { animation-delay: 0.5s; }
+          .animate-with-delay-6 { animation-delay: 0.6s; }
+          .animate-with-delay-7 { animation-delay: 0.7s; }
+          .animate-with-delay-8 { animation-delay: 0.8s; }
+          .animate-with-delay-9 { animation-delay: 0.9s; }
+          .animate-with-delay-10 { animation-delay: 1.0s; }
+          .animate-with-delay-11 { animation-delay: 1.1s; }
+          .animate-with-delay-12 { animation-delay: 1.2s; }
+          .animate-with-delay-13 { animation-delay: 1.3s; }
+          .animate-with-delay-14 { animation-delay: 1.4s; }
+          .animate-with-delay-15 { animation-delay: 1.5s; }
+        `
+      }} />
+
       {/* Background with animated elements (SAME AS OTHER SECTIONS) */}
       <div className="absolute inset-0">
         <div className={`absolute inset-0 ${
@@ -171,22 +400,26 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
         <div className="text-center mb-16">
           <h2 className={`text-4xl sm:text-5xl md:text-6xl font-bold mb-4 ${
             isDark ? 'text-white' : 'text-gray-900'
-          }`}>
+          } ${isVisible ? 'animate-fade-in-up animate-with-delay-1' : 'animation-reset'}`}>
             <span className="text-gradient-animated">
               {t.vendors.title}
             </span>
           </h2>
-          <p className="text-lg sm:text-xl md:text-2xl font-medium text-gradient-blue-green mb-6">
+          <p className={`text-lg sm:text-xl md:text-2xl font-medium text-gradient-blue-green mb-6 ${
+            isVisible ? 'animate-fade-in-up animate-with-delay-2' : 'animation-reset'
+          }`}>
             {t.vendors.subtitle}
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-emerald-600 mx-auto rounded-full" />
+          <div className={`w-24 h-1 bg-gradient-to-r from-blue-600 to-emerald-600 mx-auto rounded-full ${
+            isVisible ? 'animate-scale-in animate-with-delay-3' : 'animation-reset'
+          }`} />
         </div>
 
         {/* Description */}
         <div className="text-center mb-12">
           <p className={`text-lg md:text-xl max-w-3xl mx-auto leading-relaxed ${
             isDark ? 'text-gray-300' : 'text-gray-600'
-          }`}>
+          } ${isVisible ? 'animate-fade-in-up animate-with-delay-4' : 'animation-reset'}`}>
             {t.vendors.description}
           </p>
         </div>
@@ -200,16 +433,16 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
                 isDark 
                   ? 'glass-effect-dark border border-gray-700/50' 
                   : 'glass-effect border border-white/20 shadow-lg'
-              }`}
+              } ${isVisible ? `${vendor.animationClass} animate-with-delay-${index + 5}` : 'animation-reset'}`}
             >
               <div className="text-center">
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 rounded-lg bg-gradient-to-r ${vendor.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                  <Network className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 rounded-lg bg-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg border border-gray-200">
+                  {vendor.logo}
                 </div>
                 <h3 className={`text-xs sm:text-sm font-bold mb-1 group-hover:text-blue-500 transition-colors duration-300 ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>
-                  {vendor.logo}
+                  {vendor.name}
                 </h3>
                 <p className={`text-xs opacity-70 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2 ${
                   isDark ? 'text-gray-300' : 'text-gray-600'
@@ -226,8 +459,9 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
           ))}
         </div>
 
-        {/* Features Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-16">
+        {/* Features and Stats Section - Side by Side */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+          {/* Features Section - Takes 1 column */}
           {features.map((feature, index) => (
             <div 
               key={index}
@@ -235,7 +469,7 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
                 isDark 
                   ? 'glass-effect-dark border border-gray-700/50' 
                   : 'glass-effect border border-white/20 shadow-lg'
-              }`}
+              } ${isVisible ? `${feature.animationClass} animate-with-delay-12` : 'animation-reset'}`}
             >
               <div className={`w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 lg:mb-6 rounded-xl bg-gradient-to-r ${feature.color} flex items-center justify-center transition-transform duration-300 hover:scale-110 shadow-lg`}>
                 <feature.icon className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
@@ -254,57 +488,36 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
               </p>
             </div>
           ))}
-        </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-16">
-          {[
-            {
-              number: '7+',
-              label: currentLang === 'az' ? 'Vendor Ortağı' : currentLang === 'en' ? 'Vendor Partners' : 'Socios Proveedores',
-              icon: Network
-            },
-            {
-              number: '50+',
-              label: currentLang === 'az' ? 'Sertifikat' : currentLang === 'en' ? 'Certifications' : 'Certificaciones',
-              icon: Award
-            },
-            {
-              number: '100+',
-              label: currentLang === 'az' ? 'Layihə' : currentLang === 'en' ? 'Projects' : 'Proyectos',
-              icon: Target
-            },
-            {
-              number: '24/7',
-              label: currentLang === 'az' ? 'Dəstək' : currentLang === 'en' ? 'Support' : 'Soporte',
-              icon: Settings
-            }
-          ].map((stat, index) => (
-            <div 
-              key={index}
-              className={`card-3d text-center p-6 lg:p-8 rounded-xl transition-all duration-300 hover:scale-105 ${
-                isDark 
-                  ? 'glass-effect-dark border border-gray-700/50' 
-                  : 'glass-effect border border-white/20 shadow-lg'
-              }`}
-            >
-              <div className={`w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 rounded-xl bg-gradient-to-r from-blue-500 to-emerald-500 flex items-center justify-center shadow-lg`}>
-                <stat.icon className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
+          {/* Stats Section - Takes 2 columns */}
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+            {stats.map((stat, index) => (
+              <div 
+                key={index}
+                className={`card-3d text-center p-6 lg:p-8 rounded-xl transition-all duration-300 hover:scale-105 ${
+                  isDark 
+                    ? 'glass-effect-dark border border-gray-700/50' 
+                    : 'glass-effect border border-white/20 shadow-lg'
+                } ${isVisible ? `${stat.animationClass} animate-with-delay-${index + 10}` : 'animation-reset'}`}
+              >
+                <div className={`w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 rounded-xl bg-gradient-to-r from-blue-500 to-emerald-500 flex items-center justify-center shadow-lg`}>
+                  <stat.icon className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
+                </div>
+                <div className="text-2xl lg:text-3xl xl:text-4xl font-bold text-gradient-blue-green mb-2">
+                  {stat.number}
+                </div>
+                <div className={`text-sm lg:text-base font-medium ${
+                  isDark ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  {stat.label}
+                </div>
               </div>
-              <div className="text-2xl lg:text-3xl xl:text-4xl font-bold text-gradient-blue-green mb-2">
-                {stat.number}
-              </div>
-              <div className={`text-sm lg:text-base font-medium ${
-                isDark ? 'text-gray-300' : 'text-gray-600'
-              }`}>
-                {stat.label}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Call to Action */}
-        <div className="text-center">
+        <div className={`text-center ${isVisible ? 'animate-scale-in animate-with-delay-15' : 'animation-reset'}`}>
           <div className={`inline-flex items-center justify-center p-6 lg:p-8 rounded-2xl max-w-4xl mx-auto ${
             isDark 
               ? 'glass-effect-dark border border-gray-700/50' 
@@ -318,10 +531,10 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
                 <h3 className={`text-xl lg:text-2xl font-bold ${
                   isDark ? 'text-white' : 'text-gray-900'
                 }`}>
-                  {currentLang === 'az' 
-                    ? 'Sizin vendor məhsullarınızla da işləyə bilərik' 
-                    : currentLang === 'en' 
+                  {currentLang === 'en' 
                     ? 'We can work with your vendor products too' 
+                    : currentLang === 'az' 
+                    ? 'Sizin vendor məhsullarınızla da işləyə bilərik'
                     : 'También podemos trabajar con sus productos de proveedores'
                   }
                 </h3>
@@ -329,10 +542,10 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
               <p className={`text-base lg:text-lg mb-6 max-w-2xl mx-auto ${
                 isDark ? 'text-gray-300' : 'text-gray-600'
               }`}>
-                {currentLang === 'az' 
-                  ? 'Siyahıda olmayan vendor məhsulları ilə də işləyə bilirik. Bizimlə əlaqə saxlayın və layihənizi müzakirə edək.' 
-                  : currentLang === 'en' 
+                {currentLang === 'en' 
                   ? 'We can work with vendor products not listed here. Contact us to discuss your project.' 
+                  : currentLang === 'az' 
+                  ? 'Siyahıda olmayan vendor məhsulları ilə də işləyə bilirik. Bizimlə əlaqə saxlayın və layihənizi müzakirə edək.'
                   : 'Podemos trabajar con productos de proveedores que no están listados aquí. Contáctanos para discutir tu proyecto.'
                 }
               </p>
@@ -340,7 +553,7 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 className="btn-modern text-white px-6 py-3 lg:px-8 lg:py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
               >
-                {currentLang === 'az' ? 'Məsləhət Alın' : currentLang === 'en' ? 'Get Consultation' : 'Obtener Consulta'}
+                {currentLang === 'en' ? 'Get Consultation' : currentLang === 'az' ? 'Məsləhət Alın' : 'Obtener Consulta'}
               </button>
             </div>
           </div>

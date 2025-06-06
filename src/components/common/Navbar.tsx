@@ -23,6 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileLangOpen, setIsMobileLangOpen] = useState(false);
 
   const t = translations[currentLang];
 
@@ -41,6 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsMenuOpen(false);
+        setIsMobileLangOpen(false);
       }
     };
 
@@ -48,11 +50,24 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Close mobile language menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (isMobileLangOpen && !target.closest('.mobile-lang-menu')) {
+        setIsMobileLangOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMobileLangOpen]);
+
   const navItems = [
-    { key: 'home', label: currentLang === 'az' ? 'Ana Səhifə' : currentLang === 'en' ? 'Home' : 'Inicio' },
+    { key: 'home', label: currentLang === 'en' ? 'Home' : currentLang === 'az' ? 'Ana Səhifə' : 'Inicio' },
     { key: 'about', label: t.nav.about },
     { key: 'services', label: t.nav.services },
-    { key: 'vendors', label: currentLang === 'az' ? 'Vendorlar' : currentLang === 'en' ? 'Vendors' : 'Proveedores' },
+    { key: 'vendors', label: currentLang === 'en' ? 'Vendors' : currentLang === 'az' ? 'Vendorlar' : 'Proveedores' },
     { key: 'portfolio', label: t.nav.portfolio },
     { key: 'contact', label: t.nav.contact }
   ];
@@ -60,6 +75,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   const handleNavClick = (section: string) => {
     onNavigate(section);
     setIsMenuOpen(false);
+  };
+
+  const handleMobileLangClick = () => {
+    setIsMobileLangOpen(!isMobileLangOpen);
+  };
+
+  const handleMobileLangChange = (lang: Language) => {
+    onLangChange(lang);
+    setIsMobileLangOpen(false);
   };
 
   return (
@@ -122,8 +146,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'border-gray-300 text-gray-900 hover:border-blue-500 focus:border-blue-500'
                   }`}
                 >
-                  <option value="az" className="bg-white text-gray-900">AZ</option>
                   <option value="en" className="bg-white text-gray-900">EN</option>
+                  <option value="az" className="bg-white text-gray-900">AZ</option>
                   <option value="es" className="bg-white text-gray-900">ES</option>
                 </select>
               </div>
@@ -153,6 +177,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     ? 'hover:bg-gray-700/50' 
                     : 'hover:bg-gray-100/50'
                 }`}
+                data-mobile-menu
               >
                 <div className="relative w-6 h-6">
                   <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${
@@ -200,7 +225,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleNavClick('contact')}
                 className="w-full btn-modern text-white px-6 py-3 rounded-xl font-semibold text-center"
               >
-                {currentLang === 'az' ? 'Bizimlə Əlaqə' : currentLang === 'en' ? 'Contact Us' : 'Contáctanos'}
+                {currentLang === 'en' ? 'Contact Us' : currentLang === 'az' ? 'Bizimlə Əlaqə' : 'Contáctanos'}
               </button>
             </div>
           </div>
@@ -218,29 +243,38 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Floating Controls for Tablet/Mobile - Bottom Left */}
       <div className="md:hidden fixed bottom-6 left-6 z-50 flex flex-col space-y-3">
         
-        {/* Language Selector - Floating */}
-        <div className="relative group">
-          <button className={`w-12 h-12 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center bg-gradient-to-r from-blue-600 to-emerald-600 text-white hover:from-blue-700 hover:to-emerald-700`}>
+        {/* Language Selector - Fixed Mobile Version */}
+        <div className="relative mobile-lang-menu">
+          <button 
+            onClick={handleMobileLangClick}
+            className={`w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center bg-gradient-to-r from-blue-600 to-emerald-600 text-white hover:from-blue-700 hover:to-emerald-700 active:scale-95 ${
+              isMobileLangOpen ? 'scale-110 ring-4 ring-blue-400/50' : 'hover:scale-110'
+            }`}
+          >
             <Globe className="w-5 h-5" />
           </button>
           
-          {/* Language Options */}
+          {/* Language Options - Click-based instead of hover */}
           <div className={`absolute bottom-full left-0 mb-2 ${
             isDark ? 'bg-gray-800' : 'bg-white'
           } rounded-xl shadow-xl border ${
             isDark ? 'border-gray-600' : 'border-gray-200'
-          } opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-95 group-hover:scale-100`}>
+          } transition-all duration-300 transform ${
+            isMobileLangOpen 
+              ? 'opacity-100 scale-100 translate-y-0' 
+              : 'opacity-0 scale-95 translate-y-2 pointer-events-none'
+          }`}>
             <div className="p-2 space-y-1">
-              {['az', 'en', 'es'].map((lang) => (
+              {(['en', 'az', 'es'] as Language[]).map((lang) => (
                 <button
                   key={lang}
-                  onClick={() => onLangChange(lang as Language)}
-                  className={`block w-full px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  onClick={() => handleMobileLangChange(lang)}
+                  className={`block w-full px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 min-w-[60px] text-center active:scale-95 ${
                     currentLang === lang
                       ? 'bg-gradient-to-r from-blue-600 to-emerald-600 text-white'
                       : isDark
-                      ? 'text-gray-300 hover:bg-gray-700/50'
-                      : 'text-gray-700 hover:bg-gray-100/50'
+                      ? 'text-gray-300 hover:bg-gray-700/50 active:bg-gray-700'
+                      : 'text-gray-700 hover:bg-gray-100/50 active:bg-gray-100'
                   }`}
                 >
                   {lang.toUpperCase()}
@@ -253,7 +287,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Dark Mode Toggle - Floating */}
         <button
           onClick={onThemeToggle}
-          className={`w-12 h-12 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center ${
+          className={`w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center active:scale-95 hover:scale-110 ${
             isDark 
               ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-yellow-400 hover:from-purple-700 hover:to-indigo-700' 
               : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700'
@@ -265,6 +299,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           }
         </button>
       </div>
+
+      {/* Mobile Language Menu Backdrop */}
+      {isMobileLangOpen && (
+        <div 
+          className="fixed inset-0 z-40 md:hidden"
+          onClick={() => setIsMobileLangOpen(false)}
+        />
+      )}
     </>
   );
 };
