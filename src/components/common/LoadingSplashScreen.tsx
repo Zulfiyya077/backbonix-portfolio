@@ -250,8 +250,8 @@ const LoadingSplashScreen = () => {
           ))}
         </div>
 
-        {/* REAL BACKBONE SPINE - Left side, not under text */}
-        <div className="absolute left-1/2 transform -translate-x-80 top-1/2 -translate-y-1/2">
+        {/* REAL BACKBONE SPINE - Center on mobile, left on larger screens */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 sm:-translate-x-40 md:-translate-x-60 lg:-translate-x-80 top-1/2 -translate-y-1/2">
           
           {/* Spinal cord (omurilik) - curved like real spine */}
           <svg 
@@ -338,7 +338,7 @@ const LoadingSplashScreen = () => {
                   }}
                 >
                   {/* Vertebra main body - kidney-shaped like real vertebra */}
-                  <div className={`w-full h-full bg-gradient-to-br ${colorClasses[vertebra.type]} rounded-2xl border-2 border-white/40 shadow-lg relative overflow-hidden`}>
+                  <div className={`w-full h-full bg-gradient-to-br ${colorClasses[vertebra.type]} rounded-2xl border-2 border-white/20 sm:border-white/40 shadow-lg relative overflow-hidden opacity-40 sm:opacity-100`}>
                     
                     {/* Vertebral foramen (central hole) */}
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-2 bg-black/50 rounded-full border border-white/20" />
@@ -355,7 +355,7 @@ const LoadingSplashScreen = () => {
                   </div>
 
                   {/* Spinous process (back projection) - more prominent */}
-                  <div className={`absolute -right-3 top-1/2 transform -translate-y-1/2 w-4 h-3 bg-gradient-to-r ${colorClasses[vertebra.type]} rounded-r-xl border border-white/30 shadow-md`}>
+                  <div className={`absolute -right-3 top-1/2 transform -translate-y-1/2 w-4 h-3 bg-gradient-to-r ${colorClasses[vertebra.type]} rounded-r-xl border border-white/20 sm:border-white/30 shadow-md opacity-40 sm:opacity-100`}>
                     <div className="absolute inset-0.5 bg-white/10 rounded-r-lg" />
                   </div>
                   
