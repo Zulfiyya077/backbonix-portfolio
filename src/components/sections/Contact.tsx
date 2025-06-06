@@ -1,10 +1,11 @@
 // src/components/sections/Contact.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, User, Building, 
   MessageSquare, Clock, ExternalLink, Globe, Zap, Linkedin, Instagram, 
   Github, Twitter 
 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import type { Language, FormData } from '../../types';
 import { translations } from '../../i18n/translations';
 
@@ -13,7 +14,15 @@ interface ContactProps {
   isDark: boolean;
 }
 
+// EmailJS konfiqurasiyası - ÖZ MƏLUMATLARINALa əvəz et
+const EMAILJS_CONFIG = {
+  SERVICE_ID: 'service_r65djw2',      // EmailJS-dən al
+  TEMPLATE_ID: 'template_gg0ybw8',    // EmailJS-dən al  
+  PUBLIC_KEY: 'UJyfqJulVUSy4mn-s'       // EmailJS-dən al
+};
+
 export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -56,37 +65,57 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
-    try {
-      // Improved email functionality
-      const emailBody = `
-Yeni müştəri müraciəti:
-
-Ad: ${formData.name}
-Email: ${formData.email}
-Telefon: ${formData.phone}
-Şirkət: ${formData.company}
-
-Mesaj:
-${formData.message}
-      `;
-
-      // Open email client with pre-filled data
-      const mailtoLink = `mailto:info@backbonix.com?subject=Yeni müraciət: ${formData.name}&body=${encodeURIComponent(emailBody)}`;
-      window.location.href = mailtoLink;
-      
-      // Simulate processing time
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', phone: '', company: '', message: '' });
-    } catch (error) {
-      console.error('Email xətası:', error);
+    if (!formRef.current) return;
+    
+    // Validation
+    if (!formData.name || !formData.email || !formData.message) {
       setSubmitStatus('error');
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      // EmailJS ilə email göndər - templateParams istifadə et
+      const templateParams = {
+        user_name: formData.name,
+        user_email: formData.email,
+        user_phone: formData.phone || 'Qeyd edilməyib',
+        user_company: formData.company || 'Qeyd edilməyib',
+        message: formData.message,
+        email: 'mammadli.zulfiyya07@gmail.com', // Template-də {{email}} istifadə olunur
+        reply_to: formData.email
+      };
+
+      console.log('Sending email with params:', templateParams);
+
+      const result = await emailjs.send(
+        EMAILJS_CONFIG.SERVICE_ID,
+        EMAILJS_CONFIG.TEMPLATE_ID,
+        templateParams,
+        EMAILJS_CONFIG.PUBLIC_KEY
+      );
+
+      console.log('Email sent successfully:', result.text);
+      setSubmitStatus('success');
+      
+      // Formu təmizlə
+      setFormData({ name: '', email: '', phone: '', company: '', message: '' });
+      
+      // 5 saniyə sonra success mesajını gizlət
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+      
+    } catch (error) {
+      console.error('Email send failed:', error);
+      setSubmitStatus('error');
+      
+      // 5 saniyə sonra error mesajını gizlət
+      setTimeout(() => setSubmitStatus('idle'), 5000);
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setSubmitStatus('idle'), 5000);
     }
   };
 
@@ -239,7 +268,7 @@ ${formData.message}
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
               {/* Name & Email Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="relative">
@@ -262,6 +291,7 @@ ${formData.message}
                       onFocus={() => setFocusedField('name')}
                       onBlur={() => setFocusedField(null)}
                       required
+                      disabled={isSubmitting}
                       className={`w-full pl-10 pr-3 py-3 rounded-lg border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
                         isDark 
                           ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
@@ -292,6 +322,7 @@ ${formData.message}
                       onFocus={() => setFocusedField('email')}
                       onBlur={() => setFocusedField(null)}
                       required
+                      disabled={isSubmitting}
                       className={`w-full pl-10 pr-3 py-3 rounded-lg border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
                         isDark 
                           ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
@@ -324,6 +355,7 @@ ${formData.message}
                       onChange={handleInputChange}
                       onFocus={() => setFocusedField('phone')}
                       onBlur={() => setFocusedField(null)}
+                      disabled={isSubmitting}
                       className={`w-full pl-10 pr-3 py-3 rounded-lg border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
                         isDark 
                           ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
@@ -353,6 +385,7 @@ ${formData.message}
                       onChange={handleInputChange}
                       onFocus={() => setFocusedField('company')}
                       onBlur={() => setFocusedField(null)}
+                      disabled={isSubmitting}
                       className={`w-full pl-10 pr-3 py-3 rounded-lg border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
                         isDark 
                           ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
@@ -385,6 +418,7 @@ ${formData.message}
                     onBlur={() => setFocusedField(null)}
                     required
                     rows={4}
+                    disabled={isSubmitting}
                     className={`w-full pl-10 pr-3 py-3 rounded-lg border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none ${
                       isDark 
                         ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
@@ -399,9 +433,7 @@ ${formData.message}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full btn-modern flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-semibold text-white transition-all duration-300 ${
-                  isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
-                }`}
+                className={`w-full btn-modern flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100`}
               >
                 {isSubmitting ? (
                   <>

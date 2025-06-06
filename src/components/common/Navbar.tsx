@@ -1,6 +1,6 @@
 // src/components/common/Navbar.tsx
-import  { useState, useEffect } from 'react';
-import {  Sun, Moon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Sun, Moon, Globe } from 'lucide-react';
 import type { Language } from '../../types';
 import { translations } from '../../i18n/translations';
 
@@ -26,7 +26,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const t = translations[currentLang];
 
-  // Simple scroll detection (no auto-hide)
+  // Simple scroll detection
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -64,13 +64,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      {/* Navbar - Always visible */}
+      {/* Navbar - Always solid background */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled || isMenuOpen
-          ? isDark 
-            ? 'glass-effect-dark shadow-2xl border-b border-gray-700/50' 
-            : 'glass-effect shadow-2xl border-b border-white/20'
-          : 'bg-transparent'
+        isDark 
+          ? 'bg-gray-900 shadow-2xl border-b border-gray-700/50' 
+          : 'bg-white shadow-2xl border-b border-gray-200/50'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-18 py-3">
@@ -86,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="w-0 group-hover:w-full h-0.5 bg-gradient-to-r from-blue-600 to-emerald-600 transition-all duration-300" />
             </div>
 
-            {/* Desktop Navigation - Only text */}
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-2">
               {navItems.map((item) => (
                 <button
@@ -110,8 +108,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               ))}
             </div>
 
-            {/* Controls */}
-            <div className="flex items-center space-x-3">
+            {/* Desktop Controls - Only Language and Theme */}
+            <div className="hidden md:flex items-center space-x-3">
               
               {/* Language Selector */}
               <div className="relative group">
@@ -128,7 +126,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <option value="en" className="bg-white text-gray-900">EN</option>
                   <option value="es" className="bg-white text-gray-900">ES</option>
                 </select>
-                {/* <Globe className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none opacity-50" /> */}
               </div>
 
               {/* Dark Mode Toggle */}
@@ -145,30 +142,30 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <Moon size={20} className="drop-shadow-lg" />
                 }
               </button>
+            </div>
 
-              {/* Mobile Menu Button */}
-              <div className="md:hidden">
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className={`p-2 rounded-xl transition-all duration-300 ${
-                    isDark 
-                      ? 'hover:bg-gray-700/50' 
-                      : 'hover:bg-gray-100/50'
-                  }`}
-                >
-                  <div className="relative w-6 h-6">
-                    <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${
-                      isMenuOpen ? 'rotate-45 translate-y-2' : 'translate-y-0'
-                    }`} />
-                    <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out translate-y-2 ${
-                      isMenuOpen ? 'opacity-0' : 'opacity-100'
-                    }`} />
-                    <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${
-                      isMenuOpen ? '-rotate-45 translate-y-2' : 'translate-y-4'
-                    }`} />
-                  </div>
-                </button>
-              </div>
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className={`p-2 rounded-xl transition-all duration-300 ${
+                  isDark 
+                    ? 'hover:bg-gray-700/50' 
+                    : 'hover:bg-gray-100/50'
+                }`}
+              >
+                <div className="relative w-6 h-6">
+                  <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${
+                    isMenuOpen ? 'rotate-45 translate-y-2' : 'translate-y-0'
+                  }`} />
+                  <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out translate-y-2 ${
+                    isMenuOpen ? 'opacity-0' : 'opacity-100'
+                  }`} />
+                  <span className={`absolute h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${
+                    isMenuOpen ? '-rotate-45 translate-y-2' : 'translate-y-4'
+                  }`} />
+                </div>
+              </button>
             </div>
           </div>
         </div>
@@ -178,7 +175,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className={`px-4 py-6 space-y-3 ${
-            isDark ? 'glass-effect-dark border-t border-gray-700/50' : 'glass-effect border-t border-white/20'
+            isDark ? 'bg-gray-900 border-t border-gray-700' : 'bg-white border-t border-gray-200'
           }`}>
             {navItems.map((item, index) => (
               <button
@@ -217,6 +214,57 @@ export const Navbar: React.FC<NavbarProps> = ({
           onClick={() => setIsMenuOpen(false)}
         />
       )}
+
+      {/* Floating Controls for Tablet/Mobile - Bottom Left */}
+      <div className="md:hidden fixed bottom-6 left-6 z-50 flex flex-col space-y-3">
+        
+        {/* Language Selector - Floating */}
+        <div className="relative group">
+          <button className={`w-12 h-12 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center bg-gradient-to-r from-blue-600 to-emerald-600 text-white hover:from-blue-700 hover:to-emerald-700`}>
+            <Globe className="w-5 h-5" />
+          </button>
+          
+          {/* Language Options */}
+          <div className={`absolute bottom-full left-0 mb-2 ${
+            isDark ? 'bg-gray-800' : 'bg-white'
+          } rounded-xl shadow-xl border ${
+            isDark ? 'border-gray-600' : 'border-gray-200'
+          } opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-95 group-hover:scale-100`}>
+            <div className="p-2 space-y-1">
+              {['az', 'en', 'es'].map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => onLangChange(lang as Language)}
+                  className={`block w-full px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                    currentLang === lang
+                      ? 'bg-gradient-to-r from-blue-600 to-emerald-600 text-white'
+                      : isDark
+                      ? 'text-gray-300 hover:bg-gray-700/50'
+                      : 'text-gray-700 hover:bg-gray-100/50'
+                  }`}
+                >
+                  {lang.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Dark Mode Toggle - Floating */}
+        <button
+          onClick={onThemeToggle}
+          className={`w-12 h-12 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center ${
+            isDark 
+              ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-yellow-400 hover:from-purple-700 hover:to-indigo-700' 
+              : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700'
+          }`}
+        >
+          {isDark ? 
+            <Sun className="w-5 h-5 drop-shadow-lg" /> : 
+            <Moon className="w-5 h-5 drop-shadow-lg" />
+          }
+        </button>
+      </div>
     </>
   );
 };

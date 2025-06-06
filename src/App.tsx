@@ -4,6 +4,7 @@ import type { Language } from './types';
 import { useTheme } from './hooks/useTheme';
 
 // Components
+import LoadingSplashScreen from './components/common/LoadingSplashScreen';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { Hero } from './components/sections/Hero';
@@ -16,7 +17,17 @@ import { Contact } from './components/sections/Contact';
 function App() {
   const [currentLang, setCurrentLang] = useState<Language>('az');
   const [activeSection, setActiveSection] = useState('home');
+  const [isLoading, setIsLoading] = useState(true);
   const { isDark, toggleTheme } = useTheme();
+
+  // Loading screen timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3500); // 3.5 saniyə loading
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Scroll to section function
   const scrollToSection = (sectionId: string) => {
@@ -73,66 +84,78 @@ function App() {
   }, []);
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      isDark ? 'dark bg-gray-900 text-white' : 'bg-white text-gray-900'
-    }`}>
-      {/* Navigation */}
-      <Navbar
-        currentLang={currentLang}
-        onLangChange={handleLanguageChange}
-        isDark={isDark}
-        onThemeToggle={toggleTheme}
-        activeSection={activeSection}
-        onNavigate={scrollToSection}
-      />
-
-      {/* Main Content */}
-      <main>
-        {/* Hero Section */}
-        <Hero
+    <>
+      {/* Loading Splash Screen */}
+      {isLoading && <LoadingSplashScreen />}
+      
+      {/* Main App Content */}
+      <div 
+        className={`min-h-screen transition-colors duration-300 ${
+          isDark ? 'dark bg-gray-900 text-white' : 'bg-white text-gray-900'
+        } ${isLoading ? 'overflow-hidden' : ''}`}
+        style={{
+          opacity: isLoading ? 0 : 1,
+          transition: 'opacity 0.5s ease-in-out'
+        }}
+      >
+        {/* Navigation */}
+        <Navbar
           currentLang={currentLang}
+          onLangChange={handleLanguageChange}
           isDark={isDark}
-          onContactClick={() => scrollToSection('contact')}
+          onThemeToggle={toggleTheme}
+          activeSection={activeSection}
+          onNavigate={scrollToSection}
         />
 
-        {/* About Section */}
-        <About
+        {/* Main Content */}
+        <main>
+          {/* Hero Section */}
+          <Hero
+            currentLang={currentLang}
+            isDark={isDark}
+            onContactClick={() => scrollToSection('contact')}
+          />
+
+          {/* About Section */}
+          <About
+            currentLang={currentLang}
+            isDark={isDark}
+          />
+
+          {/* Services Section */}
+          <Services
+            currentLang={currentLang}
+            isDark={isDark}
+          />
+
+          {/* Vendor Experience Section */}
+          <VendorExperience
+            currentLang={currentLang}
+            isDark={isDark}
+          />
+
+          {/* Portfolio Section */}
+          <Portfolio
+            currentLang={currentLang}
+            isDark={isDark}
+          />
+
+          {/* Contact Section */}
+          <Contact
+            currentLang={currentLang}
+            isDark={isDark}
+          />
+        </main>
+
+        {/* Footer */}
+        <Footer
           currentLang={currentLang}
           isDark={isDark}
+          onNavigate={scrollToSection}
         />
-
-        {/* Services Section */}
-        <Services
-          currentLang={currentLang}
-          isDark={isDark}
-        />
-
-        {/* Vendor Experience Section */}
-        <VendorExperience
-          currentLang={currentLang}
-          isDark={isDark}
-        />
-
-        {/* Portfolio Section */}
-        <Portfolio
-          currentLang={currentLang}
-          isDark={isDark}
-        />
-
-        {/* Contact Section */}
-        <Contact
-          currentLang={currentLang}
-          isDark={isDark}
-        />
-      </main>
-
-      {/* Footer */}
-      <Footer
-        currentLang={currentLang}
-        isDark={isDark}
-        onNavigate={scrollToSection}
-      />
-    </div>
+      </div>
+    </>
   );
 }
 

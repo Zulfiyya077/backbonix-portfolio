@@ -29,6 +29,59 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isDark }) => 
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Project images from Supabase
+  const projectImages = {
+    cop29: 'https://xdzksswqqqoonxbwcmup.supabase.co/storage/v1/object/sign/Images/cop29.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMDY5ODU4NC04NThmLTRiNDItYjU4Zi1lNWQ5YzIxY2NlOTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJJbWFnZXMvY29wMjkuanBnIiwiaWF0IjoxNzQ5MjIxOTI0LCJleHAiOjE3ODA3NTc5MjR9.1noOXCWqEUGpLJWjpb-PDvaA7WDU6Hhbef2dF2iEtYc',
+    astronavtika: 'https://xdzksswqqqoonxbwcmup.supabase.co/storage/v1/object/sign/Images/astro2.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMDY5ODU4NC04NThmLTRiNDItYjU4Zi1lNWQ5YzIxY2NlOTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJJbWFnZXMvYXN0cm8yLmpwZyIsImlhdCI6MTc0OTIyMzE2OSwiZXhwIjoxNzgwNzU5MTY5fQ.xvqdqbPeW8GuxyH4Er0m0xGVmzrDO_SY_qUTr5LS6lk',
+    visa: 'https://xdzksswqqqoonxbwcmup.supabase.co/storage/v1/object/sign/Images/visa.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMDY5ODU4NC04NThmLTRiNDItYjU4Zi1lNWQ5YzIxY2NlOTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJJbWFnZXMvdmlzYS53ZWJwIiwiaWF0IjoxNzQ5MjIzMjM0LCJleHAiOjE3ODA3NTkyMzR9.evj0eU7aQoiLpe5Dboa2XJH8LP2Tf2qglVCK1aoPBm8',
+    chess: 'https://xdzksswqqqoonxbwcmup.supabase.co/storage/v1/object/sign/Images/chess.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMDY5ODU4NC04NThmLTRiNDItYjU4Zi1lNWQ5YzIxY2NlOTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJJbWFnZXMvY2hlc3MucG5nIiwiaWF0IjoxNzQ5MjIzMzMyLCJleHAiOjE3ODA3NTkzMzJ9.kw_WIOPTQWoa7RdzIlU-PNfY5zn6McInZRy0kCRG-4E'
+  };
+
+  const projects = t.portfolio.projects.map((project, index) => {
+    // Debug üçün console log
+    console.log(`Project ${index}:`, project.title);
+    
+    // Düzgün ardıcıllıqla şəkil təyin edirik
+    let imageUrl;
+    switch(index) {
+      case 0:
+        imageUrl = projectImages.astronavtika;   // 1-ci: Astronautika Konqresi
+        break;
+      case 1:
+        imageUrl = projectImages.cop29;          // 2-ci: COP29 Layihəsi
+        break;
+      case 2:
+        imageUrl = projectImages.chess;          // 3-cü: Şahmat Çempionatı
+        break;
+      case 3:
+        imageUrl = projectImages.cop29;          // 4-cü: Dövlət Şirkətləri (default)
+        break;
+      case 4:
+        imageUrl = projectImages.cop29;          // 5-ci: Data Center (default)
+        break;
+      case 5:
+        imageUrl = projectImages.visa;           // 6-cı: Mastercard və Visa
+        break;
+      default:
+        imageUrl = projectImages.cop29;          // Default
+    }
+    
+    return {
+      ...project,
+      imageUrl: imageUrl,
+      category: index < 2 ? 'Enterprise' : index < 4 ? 'Government' : 'Migration',
+      year: '2023-2024',
+      duration: currentLang === 'az' ? '3-6 ay' : currentLang === 'en' ? '3-6 months' : '3-6 meses',
+      team: '5-15',
+      client: index === 0 ? 'Heydar Aliyev Center' : 
+              index === 1 ? 'Mingachevir Office' : 
+              index === 2 ? 'State University' : 
+              index === 3 ? 'Medical Center' : 'Tech Company',
+      status: 'completed',
+      satisfaction: 98
+    };
+  });
+
   // Auto-play carousel
   useEffect(() => {
     if (isAutoPlay) {
@@ -37,22 +90,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isDark }) => 
       }, 4000);
       return () => clearInterval(interval);
     }
-  }, [isAutoPlay]);
-
-  const projects = t.portfolio.projects.map((project, index) => ({
-    ...project,
-    image: `project-${index + 1}`,
-    category: index < 2 ? 'Enterprise' : index < 4 ? 'Government' : 'Migration',
-    year: '2023-2024',
-    duration: currentLang === 'az' ? '3-6 ay' : currentLang === 'en' ? '3-6 months' : '3-6 meses',
-    team: '5-15',
-    client: index === 0 ? 'Heydar Aliyev Center' : 
-            index === 1 ? 'Mingachevir Office' : 
-            index === 2 ? 'State University' : 
-            index === 3 ? 'Medical Center' : 'Tech Company',
-    status: 'completed',
-    satisfaction: 98
-  }));
+  }, [isAutoPlay, projects.length]);
 
   // Floating IT icons (same style as Hero)
   const floatingIcons = [
@@ -261,23 +299,59 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isDark }) => 
                 </div>
               </div>
 
-              {/* Right Content - Visual */}
+              {/* Right Content - Visual with Images */}
               <div className="relative">
                 <div className={`aspect-[4/3] rounded-xl overflow-hidden relative group ${
                   isDark ? 'bg-gray-800' : 'bg-gray-200'
                 }`}>
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className={`text-center transition-all duration-500 ${
-                      isDark ? 'text-gray-400' : 'text-gray-500'
-                    }`}>
-                      <Award className="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
-                      <p className="font-medium">{projects[currentProject].title}</p>
-                      <p className="text-sm mt-1">{projects[currentProject].category}</p>
+                  {/* Project Image */}
+                  {projects[currentProject].imageUrl ? (
+                    <>
+                      <img 
+                        src={projects[currentProject].imageUrl} 
+                        alt={projects[currentProject].title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500"
+                        onError={(e) => {
+                          // Şəkil yüklənməyibsə default view göstər
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
+                      />
+                      
+                      {/* Fallback content */}
+                      <div className="w-full h-full flex items-center justify-center" style={{ display: 'none' }}>
+                        <div className={`text-center transition-all duration-500 ${
+                          isDark ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                          <Award className="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
+                          <p className="font-medium">{projects[currentProject].title}</p>
+                          <p className="text-sm mt-1">{projects[currentProject].category}</p>
+                        </div>
+                      </div>
+                      
+                      {/* Gradient overlay for images */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      
+                      {/* Project info overlay */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                        <p className="font-medium text-sm">{projects[currentProject].title}</p>
+                        <p className="text-xs opacity-80">{projects[currentProject].category}</p>
+                      </div>
+                    </>
+                  ) : (
+                    // Default view (şəkil yoxdursa)
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className={`text-center transition-all duration-500 ${
+                        isDark ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
+                        <Award className="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
+                        <p className="font-medium">{projects[currentProject].title}</p>
+                        <p className="text-sm mt-1">{projects[currentProject].category}</p>
+                      </div>
                     </div>
-                  </div>
-                  
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  )}
                 </div>
 
                 {/* Navigation Arrows */}
