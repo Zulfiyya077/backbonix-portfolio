@@ -15,7 +15,7 @@ import { Portfolio } from './components/sections/Portfolio';
 import { Contact } from './components/sections/Contact';
 
 function App() {
-  const [currentLang, setCurrentLang] = useState<Language>('az');
+  const [currentLang, setCurrentLang] = useState<Language>('en');
   const [activeSection, setActiveSection] = useState('home');
   const [isLoading, setIsLoading] = useState(true);
   const { isDark, toggleTheme } = useTheme();

@@ -140,49 +140,42 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
     { 
       name: 'Fortinet', 
       logo: <img src="https://exceldisc.com/_next/image?url=https%3A%2F%2Fapiv2.exceldisc.com%2Fmedia%2F135327%2FFortinet-logo.png&w=3840&q=75" alt="Fortinet" className="w-full h-full object-contain" />,
-      description: currentLang === 'en' ? 'Network Security' : currentLang === 'az' ? 'Şəbəkə təhlükəsizliyi' : 'Seguridad de Red',
       color: 'from-red-500 to-red-600',
       animationClass: 'animate-slide-in-left'
     },
     { 
       name: 'Cisco', 
       logo: <img src="https://brandlogos.net/wp-content/uploads/2021/11/cisco_systems-logo.png" alt="Cisco" className="w-full h-full object-contain" />,
-      description: currentLang === 'en' ? 'Network Infrastructure' : currentLang === 'az' ? 'Şəbəkə infrastrukturu' : 'Infraestructura de Red',
       color: 'from-blue-500 to-blue-600',
       animationClass: 'animate-slide-in-top'
     },
     { 
       name: 'Aruba', 
       logo: <img src="https://www.svgrepo.com/show/354803/aruba.svg" alt="Aruba" className="w-full h-full object-contain" />,
-      description: currentLang === 'en' ? 'Wireless Solutions' : currentLang === 'az' ? 'Simsiz həllər' : 'Soluciones Inalámbricas',
       color: 'from-orange-500 to-orange-600',
       animationClass: 'animate-bounce-in'
     },
     { 
       name: 'HP', 
       logo: <img src="https://upload.wikimedia.org/wikipedia/commons/4/43/HP_logo_2008.svg" alt="HP" className="w-full h-full object-contain" />,
-      description: currentLang === 'en' ? 'Server & Network' : currentLang === 'az' ? 'Server və şəbəkə' : 'Servidor y Red',
       color: 'from-indigo-500 to-indigo-600',
       animationClass: 'animate-scale-in'
     },
     { 
       name: 'TP-Link', 
       logo: <img src="https://brandlogos.net/wp-content/uploads/2020/12/tp-link-logo-300x300.png" alt="TP-Link" className="w-full h-full object-contain" />,
-      description: currentLang === 'en' ? 'Network Equipment' : currentLang === 'az' ? 'Şəbəkə avadanlıqları' : 'Equipos de Red',
       color: 'from-green-500 to-green-600',
       animationClass: 'animate-slide-in-right'
     },
     { 
       name: 'Juniper', 
       logo: <img src="https://cdn.freebiesupply.com/logos/thumbs/1x/juniper-networks-logo.png" alt="Juniper" className="w-full h-full object-contain" />,
-      description: currentLang === 'en' ? 'Enterprise Network' : currentLang === 'az' ? 'Korporativ şəbəkə' : 'Red Empresarial',
       color: 'from-teal-500 to-teal-600',
       animationClass: 'animate-rotate-in'
     },
     { 
       name: 'Huawei', 
       logo: <img src="https://icon2.cleanpng.com/20180920/aib/kisspng-logo-huawei-169126-network-2311cxh-bc2mfgec-sm212-huawei-logo-vector-ai-svg-eps-pdf-free-graphic-1713938787603.webp" alt="Huawei" className="w-full h-full object-contain" />,
-      description: currentLang === 'en' ? 'Telecom Solutions' : currentLang === 'az' ? 'Telekom həlləri' : 'Soluciones de Telecomunicaciones',
       color: 'from-purple-500 to-purple-600',
       animationClass: 'animate-fade-in-up'
     }
@@ -447,7 +440,7 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
                 <p className={`text-xs opacity-70 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2 ${
                   isDark ? 'text-gray-300' : 'text-gray-600'
                 }`}>
-                  {vendor.description}
+                 
                 </p>
               </div>
               

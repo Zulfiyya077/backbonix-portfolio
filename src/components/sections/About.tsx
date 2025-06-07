@@ -59,32 +59,25 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
   // Features with Hero-style design
   const features = [
     {
-      icon: Users,
-      title: currentLang === 'az' ? 'Peşəkar Komanda' : currentLang === 'en' ? 'Expert Team' : 'Equipo Experto',
-      description: currentLang === 'az' ? '10+ il təcrübə' : currentLang === 'en' ? '10+ years experience' : '10+ años experiencia',
-      color: 'from-blue-500 to-cyan-600',
+      icon: Award,
+      title: currentLang === 'en' ? 'Quality' : currentLang === 'az' ? 'Keyfiyyət' : 'Calidad',
+      description: currentLang === 'en' ? '100% guarantee' : currentLang === 'az' ? '100% zəmanət' : '100% garantía',
+      color: 'from-emerald-500 to-teal-600',
       animationClass: 'animate-slide-in-left'
     },
     {
-      icon: Award,
-      title: currentLang === 'az' ? 'Keyfiyyət' : currentLang === 'en' ? 'Quality' : 'Calidad',
-      description: currentLang === 'az' ? '100% zəmanət' : currentLang === 'en' ? '100% guarantee' : '100% garantía',
-      color: 'from-emerald-500 to-teal-600',
+      icon: Clock,
+      title: currentLang === 'en' ? '24/7 Support' : currentLang === 'az' ? '24/7 Dəstək' : 'Soporte 24/7',
+      description: currentLang === 'en' ? 'Always ready' : currentLang === 'az' ? 'Həmişə hazırıq' : 'Siempre listos',
+      color: 'from-indigo-500 to-blue-600',
       animationClass: 'animate-slide-in-right'
     },
     {
-      icon: Clock,
-      title: currentLang === 'az' ? '24/7 Dəstək' : currentLang === 'en' ? '24/7 Support' : 'Soporte 24/7',
-      description: currentLang === 'az' ? 'Həmişə hazırıq' : currentLang === 'en' ? 'Always ready' : 'Siempre listos',
-      color: 'from-indigo-500 to-purple-600',
-      animationClass: 'animate-slide-in-bottom'
-    },
-    {
       icon: Shield,
-      title: currentLang === 'az' ? 'Etibarlılıq' : currentLang === 'en' ? 'Reliability' : 'Confiabilidad',
-      description: currentLang === 'az' ? 'Güvənli həllər' : currentLang === 'en' ? 'Secure solutions' : 'Soluciones seguras',
-      color: 'from-purple-500 to-pink-600',
-      animationClass: 'animate-slide-in-top'
+      title: currentLang === 'en' ? 'Reliability' : currentLang === 'az' ? 'Etibarlılıq' : 'Confiabilidad',
+      description: currentLang === 'en' ? 'Secure solutions' : currentLang === 'az' ? 'Güvənli həllər' : 'Soluciones seguras',
+      color: 'from-blue-500 to-indigo-600',
+      animationClass: 'animate-slide-in-bottom'
     }
   ];
 
@@ -93,30 +86,23 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
     { 
       number: 250, 
       suffix: '+', 
-      label: currentLang === 'az' ? 'Layihə' : 'Projects', 
+      label: currentLang === 'en' ? 'Projects' : currentLang === 'az' ? 'Layihə' : 'Proyectos', 
       icon: Target,
       animationClass: 'animate-scale-in'
     },
     { 
       number: 500, 
       suffix: '+', 
-      label: currentLang === 'az' ? 'Müştəri' : 'Clients', 
+      label: currentLang === 'en' ? 'Clients' : currentLang === 'az' ? 'Müştəri' : 'Clientes', 
       icon: Users,
       animationClass: 'animate-slide-in-right'
     },
     { 
       number: 24, 
       suffix: '/7', 
-      label: currentLang === 'az' ? 'Dəstək' : 'Support', 
+      label: currentLang === 'en' ? 'Support' : currentLang === 'az' ? 'Dəstək' : 'Soporte', 
       icon: Clock,
       animationClass: 'animate-bounce-in'
-    },
-    { 
-      number: 10, 
-      suffix: '+', 
-      label: currentLang === 'az' ? 'İl' : 'Years', 
-      icon: Award,
-      animationClass: 'animate-fade-in-up'
     }
   ];
 
@@ -353,100 +339,76 @@ export const About: React.FC<AboutProps> = ({ currentLang, isDark }) => {
             }`} />
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             
-            {/* Left - Features */}
-            <div className="space-y-8">
+            {/* Left - Description Only */}
+            <div className="space-y-6">
               <p className={`text-lg md:text-xl leading-relaxed ${
                 isDark ? 'text-gray-300' : 'text-gray-600'
               } ${isVisible ? 'animate-slide-in-left animate-with-delay-2' : 'animation-reset'}`}>
                 {t.about.description}
               </p>
-
-              {/* Features Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                {features.map((feature, index) => (
-                  <div 
-                    key={index}
-                    className={`card-3d p-4 sm:p-6 rounded-xl transition-all duration-300 hover:scale-105 ${
-                      isDark 
-                        ? 'glass-effect-dark border border-gray-700/50' 
-                        : 'glass-effect border border-white/20 shadow-lg'
-                    } ${isVisible ? `${feature.animationClass} animate-with-delay-${index + 3}` : 'animation-reset'}`}
-                  >
-                    <div className={`w-10 h-10 sm:w-12 sm:h-12 mb-3 rounded-lg bg-gradient-to-r ${feature.color} flex items-center justify-center shadow-lg`}>
-                      <feature.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                    </div>
-                    <h3 className={`text-sm sm:text-base font-bold mb-2 ${
-                      isDark ? 'text-white' : 'text-gray-900'
-                    }`}>
-                      {feature.title}
-                    </h3>
-                    <p className={`text-xs sm:text-sm ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
-                      {feature.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
             </div>
 
-            {/* Right - Stats */}
-            <div ref={statsRef} className="space-y-6">
-              
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 gap-4 sm:gap-6">
-                {stats.map((stat, index) => (
-                  <div 
-                    key={index}
-                    className={`card-3d-lift text-center p-4 sm:p-6 rounded-xl transition-all duration-300 hover:scale-105 ${
-                      isDark 
-                        ? 'glass-effect-dark border border-gray-700/50' 
-                        : 'glass-effect border border-white/20 shadow-lg'
-                    } ${isVisible ? `${stat.animationClass} animate-with-delay-${index + 2}` : 'animation-reset'}`}
-                  >
-                    <div className={`w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-3 rounded-lg bg-gradient-to-r from-blue-500 to-emerald-500 flex items-center justify-center`}>
-                      <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                    </div>
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-gradient-blue-green mb-2">
-                      {animatedNumbers[index] || 0}{stat.suffix}
-                    </div>
-                    <div className={`text-xs sm:text-sm font-medium ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Company Visual Card */}
-              <div className={`card-3d p-6 sm:p-8 rounded-xl text-center transition-all duration-300 hover:scale-105 ${
+            {/* Right - Company Card */}
+            <div ref={statsRef} className="flex items-center justify-center lg:justify-start">
+              {/* Company Visual Card - Enhanced */}
+              <div className={`card-3d p-8 lg:p-12 rounded-2xl text-center transition-all duration-300 hover:scale-105 w-full max-w-md ${
                 isDark 
                   ? 'glass-effect-dark border border-gray-700/50' 
                   : 'glass-effect border border-white/20 shadow-lg'
               } ${isVisible ? 'animate-scale-in animate-with-delay-5' : 'animation-reset'}`}>
-                <Network className={`w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 ${
-                  isDark ? 'text-gray-400' : 'text-gray-500'
-                } transition-all duration-300 hover:scale-110`} />
-                <h3 className={`text-lg sm:text-xl font-bold mb-2 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
-                  BackBonix Team
-                </h3>
-                <p className={`text-sm sm:text-base ${
-                  isDark ? 'text-gray-300' : 'text-gray-600'
-                } mb-3`}>
-                  Professional IT Solutions
-                </p>
-                <div className="flex items-center justify-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-500" />
-                  <span className={`text-xs sm:text-sm ${
-                    isDark ? 'text-gray-300' : 'text-gray-600'
+                
+                {/* Company Logo/Icon */}
+                <div className="mb-6">
+                  <div className="w-20 h-20 lg:w-24 lg:h-24 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-emerald-500 flex items-center justify-center shadow-lg mb-4">
+                    <Network className="w-10 h-10 lg:w-12 lg:h-12 text-white" />
+                  </div>
+                </div>
+
+                {/* Company Info */}
+                <div className="text-center">
+                  <h3 className={`text-2xl lg:text-3xl font-bold mb-3 ${
+                    isDark ? 'text-white' : 'text-gray-900'
                   }`}>
-                    {currentLang === 'az' ? 'Sertifikatlaşmış Mütəxəssislər' : currentLang === 'en' ? 'Certified Specialists' : 'Especialistas Certificados'}
-                  </span>
+                    BackBonix
+                  </h3>
+                  <p className={`text-lg lg:text-xl font-medium mb-4 text-gradient-blue-green`}>
+                    IT Infrastructure Excellence
+                  </p>
+                  <p className={`text-base lg:text-lg ${
+                    isDark ? 'text-gray-300' : 'text-gray-600'
+                  } mb-6`}>
+                    Professional IT Solutions
+                  </p>
+
+                  {/* Key Features List */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                      <span className={`text-sm lg:text-base ${
+                        isDark ? 'text-gray-300' : 'text-gray-600'
+                      }`}>
+                        {currentLang === 'en' ? 'Expert Team' : currentLang === 'az' ? 'Peşəkar Komanda' : 'Equipo Experto'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                      <span className={`text-sm lg:text-base ${
+                        isDark ? 'text-gray-300' : 'text-gray-600'
+                      }`}>
+                        {currentLang === 'en' ? '24/7 Support' : currentLang === 'az' ? '24/7 Dəstək' : 'Soporte 24/7'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                      <span className={`text-sm lg:text-base ${
+                        isDark ? 'text-gray-300' : 'text-gray-600'
+                      }`}>
+                        {currentLang === 'en' ? 'Quality Solutions' : currentLang === 'az' ? 'Keyfiyyətli Həllər' : 'Soluciones de Calidad'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
