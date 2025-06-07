@@ -1,6 +1,6 @@
 // src/components/sections/VendorExperience.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { Award, Star, Shield, Network, Settings, Trophy, Target, Cpu, Server, Monitor } from 'lucide-react';
+import { Award, Star, Shield, Network, Settings, Trophy, Target, Cpu, Server, Monitor, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Language } from '../../types';
 import { translations } from '../../i18n/translations';
 
@@ -15,6 +15,7 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
 }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const t = translations[currentLang];
@@ -64,77 +65,6 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
     { icon: Server, size: 'w-4 h-4', position: 'bottom-48 right-32', delay: '0.8s', color: 'text-purple-400' },
     { icon: Monitor, size: 'w-6 h-6', position: 'top-48 left-32', delay: '2.5s', color: 'text-cyan-400' },
   ];
-
-  // Vendor SVG Logos
-  const FortinetLogo = () => (
-    <svg viewBox="0 0 100 40" className="w-full h-full">
-      <rect x="5" y="15" width="90" height="10" fill="#E31E24" rx="2"/>
-      <text x="50" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">FORTINET</text>
-      <circle cx="15" cy="8" r="3" fill="#E31E24"/>
-      <circle cx="25" cy="8" r="3" fill="#E31E24"/>
-      <circle cx="35" cy="8" r="3" fill="#E31E24"/>
-    </svg>
-  );
-
-  const CiscoLogo = () => (
-    <svg viewBox="0 0 100 40" className="w-full h-full">
-      <text x="50" y="25" textAnchor="middle" fill="#1BA0D7" fontSize="12" fontWeight="bold">cisco</text>
-      <g fill="#1BA0D7">
-        <rect x="10" y="5" width="2" height="8"/>
-        <rect x="15" y="3" width="2" height="12"/>
-        <rect x="20" y="2" width="2" height="14"/>
-        <rect x="25" y="4" width="2" height="10"/>
-        <rect x="73" y="4" width="2" height="10"/>
-        <rect x="78" y="2" width="2" height="14"/>
-        <rect x="83" y="3" width="2" height="12"/>
-        <rect x="88" y="5" width="2" height="8"/>
-      </g>
-    </svg>
-  );
-
-  const ArubaLogo = () => (
-    <svg viewBox="0 0 100 40" className="w-full h-full">
-      <circle cx="20" cy="20" r="12" fill="#FF6900"/>
-      <path d="M25 15 L35 25 L30 25 L25 20 L20 25 L15 25 Z" fill="#FF6900"/>
-      <text x="55" y="25" textAnchor="middle" fill="#FF6900" fontSize="10" fontWeight="bold">aruba</text>
-    </svg>
-  );
-
-  const HPLogo = () => (
-    <svg viewBox="0 0 100 40" className="w-full h-full">
-      <circle cx="50" cy="20" r="18" fill="#0096D6"/>
-      <text x="50" y="28" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">hp</text>
-    </svg>
-  );
-
-  const TPLinkLogo = () => (
-    <svg viewBox="0 0 100 40" className="w-full h-full">
-      <rect x="5" y="12" width="90" height="16" fill="#4CAF50" rx="8"/>
-      <text x="50" y="23" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">TP-LINK</text>
-      <circle cx="20" cy="8" r="2" fill="#4CAF50"/>
-      <circle cx="30" cy="8" r="2" fill="#4CAF50"/>
-      <circle cx="40" cy="8" r="2" fill="#4CAF50"/>
-      <path d="M15 32 Q50 28 85 32" stroke="#4CAF50" strokeWidth="2" fill="none"/>
-    </svg>
-  );
-
-  const JuniperLogo = () => (
-    <svg viewBox="0 0 100 40" className="w-full h-full">
-      <rect x="10" y="10" width="80" height="20" fill="#84BD00" rx="10"/>
-      <text x="50" y="23" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">JUNIPER</text>
-      <path d="M20 5 L25 10 L20 15 L15 10 Z" fill="#84BD00"/>
-      <path d="M80 5 L85 10 L80 15 L75 10 Z" fill="#84BD00"/>
-    </svg>
-  );
-
-  const HuaweiLogo = () => (
-    <svg viewBox="0 0 100 40" className="w-full h-full">
-      <circle cx="50" cy="20" r="16" fill="#FF0000"/>
-      <path d="M40 12 Q50 8 60 12 Q50 16 40 12" fill="white"/>
-      <path d="M40 28 Q50 32 60 28 Q50 24 40 28" fill="white"/>
-      <text x="50" y="24" textAnchor="middle" fill="white" fontSize="6" fontWeight="bold">HUAWEI</text>
-    </svg>
-  );
 
   const vendors = [
     { 
@@ -193,18 +123,15 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
 
   const stats = [
     {
-      number: '50+',
-      label: currentLang === 'en' ? 'Projects' : currentLang === 'az' ? 'Layihə' : 'Proyectos',
-      icon: Target,
-      animationClass: 'animate-bounce-in'
-    },
-    {
       number: '24/7',
       label: currentLang === 'en' ? 'Support' : currentLang === 'az' ? 'Dəstək' : 'Soporte',
       icon: Settings,
       animationClass: 'animate-scale-in'
     }
   ];
+
+  // Auto-slide functionality - Not needed for marquee
+  // Removed auto-slide logic
 
   return (
     <section 
@@ -329,6 +256,20 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
           .animate-with-delay-13 { animation-delay: 1.3s; }
           .animate-with-delay-14 { animation-delay: 1.4s; }
           .animate-with-delay-15 { animation-delay: 1.5s; }
+          
+          /* Marquee Animation */
+          @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+          }
+          
+          .animate-marquee {
+            animation: marquee 20s linear infinite;
+          }
+          
+          .animate-marquee:hover {
+            animation-play-state: paused;
+          }
         `
       }} />
 
@@ -417,43 +358,115 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
           </p>
         </div>
 
-        {/* Vendors Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 sm:gap-6 mb-16">
-          {vendors.map((vendor, index) => (
-            <div
-              key={index}
-              className={`card-3d group p-4 sm:p-6 rounded-xl transition-all duration-300 hover:scale-105 cursor-pointer ${
-                isDark 
-                  ? 'glass-effect-dark border border-gray-700/50' 
-                  : 'glass-effect border border-white/20 shadow-lg'
-              } ${isVisible ? `${vendor.animationClass} animate-with-delay-${index + 5}` : 'animation-reset'}`}
-            >
-              <div className="text-center">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 rounded-lg bg-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg border border-gray-200">
-                  {vendor.logo}
+        {/* Vendors Section */}
+        <div className="mb-16">
+          {/* Mobile and Tablet: Static Grid */}
+          <div className="block lg:hidden">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+              {vendors.map((vendor, index) => (
+                <div
+                  key={index}
+                  className={`card-3d group p-4 sm:p-6 rounded-xl transition-all duration-300 hover:scale-105 cursor-pointer ${
+                    isDark 
+                      ? 'glass-effect-dark border border-gray-700/50' 
+                      : 'glass-effect border border-white/20 shadow-lg'
+                  } ${isVisible ? `${vendor.animationClass} animate-with-delay-${index + 5}` : 'animation-reset'}`}
+                >
+                  <div className="text-center">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 rounded-lg bg-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg border border-gray-200">
+                      {vendor.logo}
+                    </div>
+                    <h3 className={`text-xs sm:text-sm font-bold mb-1 group-hover:text-blue-500 transition-colors duration-300 ${
+                      isDark ? 'text-white' : 'text-gray-900'
+                    }`}>
+                      {vendor.name}
+                    </h3>
+                  </div>
+                  
+                  {/* Corner Star */}
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                  </div>
                 </div>
-                <h3 className={`text-xs sm:text-sm font-bold mb-1 group-hover:text-blue-500 transition-colors duration-300 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
-                  {vendor.name}
-                </h3>
-                <p className={`text-xs opacity-70 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2 ${
-                  isDark ? 'text-gray-300' : 'text-gray-600'
-                }`}>
-                 
-                </p>
-              </div>
-              
-              {/* Corner Star */}
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <Star className="w-3 h-3 text-yellow-400 fill-current" />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: Marquee Style */}
+          <div className="hidden lg:block">
+            <div className="relative -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden">
+              {/* Marquee Container */}
+              <div className="animate-marquee flex whitespace-nowrap">
+                {/* First Set */}
+                {vendors.map((vendor, index) => (
+                  <div
+                    key={`first-${index}`}
+                    className="flex-shrink-0 mx-3"
+                  >
+                    <div
+                      className={`card-3d group p-6 rounded-xl transition-all duration-300 hover:scale-105 cursor-pointer w-48 ${
+                        isDark 
+                          ? 'glass-effect-dark border border-gray-700/50' 
+                          : 'glass-effect border border-white/20 shadow-lg'
+                      } ${isVisible ? 'animate-scale-in' : 'animation-reset'}`}
+                    >
+                      <div className="text-center">
+                        <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg border border-gray-200">
+                          {vendor.logo}
+                        </div>
+                        <h3 className={`text-sm font-bold group-hover:text-blue-500 transition-colors duration-300 ${
+                          isDark ? 'text-white' : 'text-gray-900'
+                        }`}>
+                          {vendor.name}
+                        </h3>
+                      </div>
+                      
+                      {/* Corner Star */}
+                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {/* Second Set (Duplicate for seamless loop) */}
+                {vendors.map((vendor, index) => (
+                  <div
+                    key={`second-${index}`}
+                    className="flex-shrink-0 mx-3"
+                  >
+                    <div
+                      className={`card-3d group p-6 rounded-xl transition-all duration-300 hover:scale-105 cursor-pointer w-48 ${
+                        isDark 
+                          ? 'glass-effect-dark border border-gray-700/50' 
+                          : 'glass-effect border border-white/20 shadow-lg'
+                      } ${isVisible ? 'animate-scale-in' : 'animation-reset'}`}
+                    >
+                      <div className="text-center">
+                        <div className="w-16 h-16 mx-auto mb-4 rounded-lg bg-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg border border-gray-200">
+                          {vendor.logo}
+                        </div>
+                        <h3 className={`text-sm font-bold group-hover:text-blue-500 transition-colors duration-300 ${
+                          isDark ? 'text-white' : 'text-gray-900'
+                        }`}>
+                          {vendor.name}
+                        </h3>
+                      </div>
+                      
+                      {/* Corner Star */}
+                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Features and Stats Section - Side by Side */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-16">
           {/* Features Section - Takes 1 column */}
           {features.map((feature, index) => (
             <div 
@@ -482,8 +495,8 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
             </div>
           ))}
 
-          {/* Stats Section - Takes 2 columns */}
-          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+          {/* Stats Section - Takes 1 column */}
+          <div className="grid grid-cols-1 gap-6 lg:gap-8">
             {stats.map((stat, index) => (
               <div 
                 key={index}

@@ -3,7 +3,7 @@ import { Server, Network, Shield } from 'lucide-react';
 
 const LoadingSplashScreen = () => {
   const [isVisible, setIsVisible] = useState(true);
-  const [loadingProgress, setLoadingProgress] = useState(0);
+ 
   const [currentText, setCurrentText] = useState('');
 
   // Simple loading texts
@@ -14,33 +14,6 @@ const LoadingSplashScreen = () => {
     'Almost ready...'
   ];
 
-  // Loading simulation
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setLoadingProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(timer);
-          setTimeout(() => setIsVisible(false), 500);
-          return 100;
-        }
-        return prev + 2;
-      });
-    }, 80);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // Text animation
-  useEffect(() => {
-    const textTimer = setInterval(() => {
-      const textIndex = Math.floor(loadingProgress / 25);
-      if (textIndex < loadingTexts.length) {
-        setCurrentText(loadingTexts[textIndex]);
-      }
-    }, 1500);
-
-    return () => clearInterval(textTimer);
-  }, [loadingProgress]);
 
   if (!isVisible) return null;
 
@@ -151,18 +124,7 @@ const LoadingSplashScreen = () => {
             </div>
           </div>
 
-          {/* Simple Progress Bar */}
-          <div className="w-80 sm:w-96 mx-auto mb-8 px-4">
-            <div className="w-full bg-gray-700/50 rounded-full h-2 glass-effect">
-              <div 
-                className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-300 ease-out rounded-full"
-                style={{ width: `${loadingProgress}%` }}
-              />
-            </div>
-            <div className="text-center mt-3">
-              <span className="text-sm text-blue-300">{Math.round(loadingProgress)}%</span>
-            </div>
-          </div>
+ 
 
           {/* Loading text */}
           <p className="text-base sm:text-lg text-gray-300 px-4">
