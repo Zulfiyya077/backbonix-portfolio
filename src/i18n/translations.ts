@@ -136,7 +136,7 @@ export const translations = {
     about: {
       title: 'About Us',
       subtitle: 'Professional IT Team',
-      description: 'At BackBonix, we are a professional team specializing in modern IT infrastructure solutions. We are proud to provide high-quality services to our clients.',
+      description: '',
       features: [
         'Experienced engineering team',
         'Modern technologies',

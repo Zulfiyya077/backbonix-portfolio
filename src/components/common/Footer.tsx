@@ -1,6 +1,6 @@
 // src/components/common/Footer.tsx
 import React from 'react';
-import { Mail, Phone, MapPin, Network, ExternalLink, Linkedin, MessageSquare, Send, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, Network, ExternalLink, Globe } from 'lucide-react';
 import type { Language } from '../../types';
 import { translations } from '../../i18n/translations';
 
@@ -41,37 +41,6 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
         { name: currentLang === 'en' ? 'FAQ' : currentLang === 'az' ? 'Sual-Cavab' : 'FAQ', action: () => onNavigate('contact') },
         { name: currentLang === 'en' ? 'Documentation' : currentLang === 'az' ? 'Sənədlər' : 'Documentación', action: () => onNavigate('contact') }
       ]
-    }
-  ];
-
-  const socialLinks = [
-    { 
-      name: 'LinkedIn', 
-      href: '#', 
-      icon: Linkedin,
-      color: 'hover:bg-blue-600 hover:text-white',
-      bgColor: 'bg-blue-100 text-blue-600'
-    },
-    { 
-      name: 'WhatsApp', 
-      href: '#', 
-      icon: MessageSquare,
-      color: 'hover:bg-green-600 hover:text-white',
-      bgColor: 'bg-green-100 text-green-600'
-    },
-    { 
-      name: 'Telegram', 
-      href: '#', 
-      icon: Send,
-      color: 'hover:bg-blue-500 hover:text-white',
-      bgColor: 'bg-blue-100 text-blue-500'
-    },
-    { 
-      name: 'Instagram', 
-      href: '#', 
-      icon: Instagram,
-      color: 'hover:bg-pink-600 hover:text-white',
-      bgColor: 'bg-pink-100 text-pink-600'
     }
   ];
 
@@ -136,25 +105,38 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
                 }
               </p>
 
-              {/* Contact Info */}
+              {/* Contact Info - Updated with card details */}
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <Phone className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                   <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    +1 (555) 123-4567
+                    +1 (571) 315-9611
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                   <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    info@backbonix.com
+                    backbonix@gmail.com
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                   <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    Virginia, USA
+                    Fairfax, VA 20171
                   </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Globe className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                  <a 
+                    href="https://www.backbonix.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`text-sm transition-colors duration-200 hover:text-blue-500 ${
+                      isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-600 hover:text-blue-600'
+                    }`}
+                  >
+                    www.backbonix.com
+                  </a>
                 </div>
               </div>
             </div>
@@ -246,22 +228,26 @@ export const Footer: React.FC<FooterProps> = ({ currentLang, isDark, onNavigate 
               }
             </div>
 
-            {/* Social Links - Modern Icons */}
-            <div className="flex items-center space-x-3">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110 ${
-                    isDark 
-                      ? `bg-gray-800/50 hover:bg-gray-700 text-gray-300 ${social.color}` 
-                      : `${social.bgColor} ${social.color}`
-                  }`}
-                  title={social.name}
-                >
-                  <social.icon className="w-4 h-4" />
-                </a>
-              ))}
+            {/* Contact Info in Footer Bottom */}
+            <div className="flex items-center space-x-4">
+              <a 
+                href="tel:+15713159611"
+                className={`text-sm flex items-center space-x-1 transition-colors duration-200 hover:text-blue-500 ${
+                  isDark ? 'text-gray-400 hover:text-blue-400' : 'text-gray-500 hover:text-blue-600'
+                }`}
+              >
+                <Phone className="w-3 h-3" />
+                <span>+1 (571) 315-9611</span>
+              </a>
+              <a 
+                href="mailto:backbonix@gmail.com"
+                className={`text-sm flex items-center space-x-1 transition-colors duration-200 hover:text-blue-500 ${
+                  isDark ? 'text-gray-400 hover:text-blue-400' : 'text-gray-500 hover:text-blue-600'
+                }`}
+              >
+                <Mail className="w-3 h-3" />
+                <span>backbonix@gmail.com</span>
+              </a>
             </div>
 
             {/* Additional Links */}

@@ -31,6 +31,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isDark }) => 
 
   // Project images from Supabase
   const projectImages = {
+    data: 'https://dgtlinfra.com/wp-content/uploads/2023/11/Data-Center-Migration-Move-Moving-Plan-Strategy.jpg',
+    government: 'https://www.channelnomics.com/hubfs/Imported_Blog_Media/iStock-1960986400.jpg',
     cop29: 'https://xdzksswqqqoonxbwcmup.supabase.co/storage/v1/object/sign/Images/cop29.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMDY5ODU4NC04NThmLTRiNDItYjU4Zi1lNWQ5YzIxY2NlOTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJJbWFnZXMvY29wMjkuanBnIiwiaWF0IjoxNzQ5MjIxOTI0LCJleHAiOjE3ODA3NTc5MjR9.1noOXCWqEUGpLJWjpb-PDvaA7WDU6Hhbef2dF2iEtYc',
     astronavtika: 'https://xdzksswqqqoonxbwcmup.supabase.co/storage/v1/object/sign/Images/astro2.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMDY5ODU4NC04NThmLTRiNDItYjU4Zi1lNWQ5YzIxY2NlOTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJJbWFnZXMvYXN0cm8yLmpwZyIsImlhdCI6MTc0OTIyMzE2OSwiZXhwIjoxNzgwNzU5MTY5fQ.xvqdqbPeW8GuxyH4Er0m0xGVmzrDO_SY_qUTr5LS6lk',
     visa: 'https://xdzksswqqqoonxbwcmup.supabase.co/storage/v1/object/sign/Images/visa.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMDY5ODU4NC04NThmLTRiNDItYjU4Zi1lNWQ5YzIxY2NlOTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJJbWFnZXMvdmlzYS53ZWJwIiwiaWF0IjoxNzQ5MjIzMjM0LCJleHAiOjE3ODA3NTkyMzR9.evj0eU7aQoiLpe5Dboa2XJH8LP2Tf2qglVCK1aoPBm8',
@@ -54,10 +56,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isDark }) => 
         imageUrl = projectImages.chess;          // 3-cü: Şahmat Çempionatı
         break;
       case 3:
-        imageUrl = projectImages.cop29;          // 4-cü: Dövlət Şirkətləri (default)
+        imageUrl = projectImages.government;          // 4-cü: Dövlət Şirkətləri (default)
         break;
       case 4:
-        imageUrl = projectImages.cop29;          // 5-ci: Data Center (default)
+        imageUrl = projectImages.data;          // 5-ci: Data Center (default)
         break;
       case 5:
         imageUrl = projectImages.visa;           // 6-cı: Mastercard və Visa
@@ -73,10 +75,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isDark }) => 
       year: '2023-2024',
       duration: currentLang === 'az' ? '3-6 ay' : currentLang === 'en' ? '3-6 months' : '3-6 meses',
       team: '5-15',
-      client: index === 0 ? 'Heydar Aliyev Center' : 
-              index === 1 ? 'Mingachevir Office' : 
-              index === 2 ? 'State University' : 
-              index === 3 ? 'Medical Center' : 'Tech Company',
       status: 'completed',
       satisfaction: 98
     };
@@ -256,45 +254,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isDark }) => 
                   <div className={`text-center p-3 rounded-lg ${
                     isDark ? 'bg-gray-800/50' : 'bg-white/50 border border-gray-200'
                   }`}>
-                    <Calendar className="w-4 h-4 mx-auto mb-1 text-blue-500" />
-                    <div className={`text-xs font-medium ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
-                      {projects[currentProject].duration}
-                    </div>
-                  </div>
-
-                  <div className={`text-center p-3 rounded-lg ${
-                    isDark ? 'bg-gray-800/50' : 'bg-white/50 border border-gray-200'
-                  }`}>
-                    <Users className="w-4 h-4 mx-auto mb-1 text-emerald-500" />
-                    <div className={`text-xs font-medium ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}>
-                      {projects[currentProject].team}
-                    </div>
-                  </div>
-
-                  <div className={`text-center p-3 rounded-lg ${
-                    isDark ? 'bg-gray-800/50' : 'bg-white/50 border border-gray-200'
-                  }`}>
-                    <Award className="w-4 h-4 mx-auto mb-1 text-purple-500" />
-                    <div className={`text-xs font-medium text-emerald-500`}>
-                      {projects[currentProject].satisfaction}%
-                    </div>
-                  </div>
-                </div>
-
-                {/* Client Info */}
-                <div className={`p-3 rounded-lg ${
-                  isDark 
-                    ? 'bg-gradient-to-r from-blue-900/30 to-emerald-900/30 border border-blue-500/20' 
-                    : 'bg-gradient-to-r from-blue-50 to-emerald-50 border border-blue-200'
-                }`}>
-                  <div className={`text-sm font-medium ${
-                    isDark ? 'text-white' : 'text-gray-900'
-                  }`}>
-                    {currentLang === 'az' ? 'Müştəri:' : currentLang === 'en' ? 'Client:' : 'Cliente:'} {projects[currentProject].client}
+                    
                   </div>
                 </div>
               </div>

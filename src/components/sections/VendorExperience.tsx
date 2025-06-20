@@ -465,63 +465,7 @@ export const VendorExperience: React.FC<VendorExperienceProps> = ({
           </div>
         </div>
 
-        {/* Features and Stats Section - Side by Side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-16">
-          {/* Features Section - Takes 1 column */}
-          {features.map((feature, index) => (
-            <div 
-              key={index}
-              className={`card-3d text-center p-6 lg:p-8 rounded-xl transition-all duration-300 hover:scale-105 ${
-                isDark 
-                  ? 'glass-effect-dark border border-gray-700/50' 
-                  : 'glass-effect border border-white/20 shadow-lg'
-              } ${isVisible ? `${feature.animationClass} animate-with-delay-12` : 'animation-reset'}`}
-            >
-              <div className={`w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 lg:mb-6 rounded-xl bg-gradient-to-r ${feature.color} flex items-center justify-center transition-transform duration-300 hover:scale-110 shadow-lg`}>
-                <feature.icon className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
-              </div>
-              
-              <h3 className={`text-lg lg:text-xl font-bold mb-3 ${
-                isDark ? 'text-white' : 'text-gray-900'
-              }`}>
-                {feature.title}
-              </h3>
-              
-              <p className={`text-sm lg:text-base leading-relaxed ${
-                isDark ? 'text-gray-300' : 'text-gray-600'
-              }`}>
-                {feature.description}
-              </p>
-            </div>
-          ))}
-
-          {/* Stats Section - Takes 1 column */}
-          <div className="grid grid-cols-1 gap-6 lg:gap-8">
-            {stats.map((stat, index) => (
-              <div 
-                key={index}
-                className={`card-3d text-center p-6 lg:p-8 rounded-xl transition-all duration-300 hover:scale-105 ${
-                  isDark 
-                    ? 'glass-effect-dark border border-gray-700/50' 
-                    : 'glass-effect border border-white/20 shadow-lg'
-                } ${isVisible ? `${stat.animationClass} animate-with-delay-${index + 10}` : 'animation-reset'}`}
-              >
-                <div className={`w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 rounded-xl bg-gradient-to-r from-blue-500 to-emerald-500 flex items-center justify-center shadow-lg`}>
-                  <stat.icon className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
-                </div>
-                <div className="text-2xl lg:text-3xl xl:text-4xl font-bold text-gradient-blue-green mb-2">
-                  {stat.number}
-                </div>
-                <div className={`text-sm lg:text-base font-medium ${
-                  isDark ? 'text-gray-300' : 'text-gray-600'
-                }`}>
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
+   
         {/* Call to Action */}
         <div className={`text-center ${isVisible ? 'animate-scale-in animate-with-delay-15' : 'animation-reset'}`}>
           <div className={`inline-flex items-center justify-center p-6 lg:p-8 rounded-2xl max-w-4xl mx-auto ${

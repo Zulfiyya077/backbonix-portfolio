@@ -2,8 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, User, Building, 
-  MessageSquare, Clock, ExternalLink, Globe, Zap, Linkedin, Instagram, 
-  Github, Twitter 
+  MessageSquare, Clock, ExternalLink, Globe, Zap
 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import type { Language, FormData } from '../../types';
@@ -112,7 +111,7 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
         user_phone: formData.phone || 'Qeyd edilməyib',
         user_company: formData.company || 'Qeyd edilməyib',
         message: formData.message,
-        email: 'mammadli.zulfiyya07@gmail.com', // Template-də {{email}} istifadə olunur
+        email: 'backbonix@gmail.com', // Vizit kartdakı email
         reply_to: formData.email
       };
 
@@ -149,59 +148,30 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
     {
       icon: Phone,
       label: currentLang === 'en' ? 'Phone' : currentLang === 'az' ? 'Telefon' : 'Teléfono',
-      value: '+1 (555) 123-4567',
-      href: 'tel:+15551234567',
+      value: '+1 (571) 315-9611',
+      href: 'tel:+15713159611',
       color: 'from-emerald-500 to-teal-600',
       animationClass: 'animate-slide-in-right'
     },
     {
       icon: Mail,
       label: 'Email',
-      value: 'info@backbonix.com',
-      href: 'mailto:info@backbonix.com',
+      value: 'backbonix@gmail.com',
+      href: 'mailto:backbonix@gmail.com',
       color: 'from-blue-500 to-indigo-600',
       animationClass: 'animate-scale-in'
     },
     {
       icon: MapPin,
       label: currentLang === 'en' ? 'Address' : currentLang === 'az' ? 'Ünvan' : 'Dirección',
-      value: 'Virginia, USA',
-      href: 'https://maps.google.com',
+      value: 'Fairfax, VA 20171',
+      href: 'https://maps.google.com/?q=Fairfax,VA,20171',
       color: 'from-purple-500 to-pink-600',
       animationClass: 'animate-bounce-in'
     }
   ];
 
-  const socialLinks = [
-    { 
-      name: 'LinkedIn', 
-      icon: Linkedin, 
-      href: '#', 
-      color: 'hover:bg-blue-600',
-      bgColor: isDark ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-blue-50 text-blue-600 border border-blue-200'
-    },
-    { 
-      name: 'WhatsApp', 
-      icon: MessageSquare, 
-      href: '#', 
-      color: 'hover:bg-green-600',
-      bgColor: isDark ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-green-50 text-green-600 border border-green-200'
-    },
-    { 
-      name: 'Instagram', 
-      icon: Instagram, 
-      href: '#', 
-      color: 'hover:bg-pink-600',
-      bgColor: isDark ? 'bg-pink-500/10 text-pink-400 border border-pink-500/20' : 'bg-pink-50 text-pink-600 border border-pink-200'
-    },
-    { 
-      name: 'GitHub', 
-      icon: Github, 
-      href: '#', 
-      color: 'hover:bg-gray-600',
-      bgColor: isDark ? 'bg-gray-500/10 text-gray-400 border border-gray-500/20' : 'bg-gray-50 text-gray-600 border border-gray-200'
-    },
-  ];
+
 
   return (
     <section 
@@ -656,38 +626,12 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
               ))}
             </div>
 
-            {/* Social Media Links - Animated */}
-            <div className={`p-4 rounded-xl ${
-              isDark 
-                ? 'glass-effect-dark border border-gray-700/50' 
-                : 'glass-effect border border-white/20 shadow-lg'
-            } ${isVisible ? 'animate-flip-in animate-with-delay-8' : 'animation-reset'}`}>
-              <h3 className={`font-bold mb-3 flex items-center ${
-                isDark ? 'text-white' : 'text-gray-900'
-              }`}>
-                <Globe className="w-5 h-5 mr-2 text-blue-500" />
-                {currentLang === 'en' ? 'Social Media' : currentLang === 'az' ? 'Sosial Şəbəkələr' : 'Redes Sociales'}
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                {socialLinks.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.href}
-                    className={`flex items-center space-x-2 p-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${social.bgColor} ${social.color} hover:text-white`}
-                  >
-                    <social.icon className="w-4 h-4" />
-                    <span className="font-medium text-sm">{social.name}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-
             {/* Business Hours Compact - Animated */}
             <div className={`p-4 rounded-xl ${
               isDark 
                 ? 'glass-effect-dark border border-gray-700/50' 
                 : 'glass-effect border border-white/20 shadow-lg'
-            } ${isVisible ? 'animate-slide-in-bottom animate-with-delay-9' : 'animation-reset'}`}>
+            } ${isVisible ? 'animate-slide-in-bottom animate-with-delay-8' : 'animation-reset'}`}>
               <div className="flex items-center mb-3">
                 <Clock className={`w-5 h-5 mr-2 ${isDark ? 'text-emerald-400' : 'text-emerald-500'}`} />
                 <h3 className={`font-bold ${
@@ -717,18 +661,44 @@ export const Contact: React.FC<ContactProps> = ({ currentLang, isDark }) => {
               isDark 
                 ? 'bg-gradient-to-r from-blue-900/50 to-emerald-900/50 border border-blue-500/20' 
                 : 'bg-gradient-to-r from-blue-50 to-emerald-50 border border-blue-200'
-            } ${isVisible ? 'animate-slide-in-center animate-with-delay-10' : 'animation-reset'}`}>
+            } ${isVisible ? 'animate-slide-in-center animate-with-delay-9' : 'animation-reset'}`}>
               <h3 className={`font-bold mb-2 ${
                 isDark ? 'text-white' : 'text-gray-900'
               }`}>
                 {currentLang === 'en' ? 'Urgent Support' : currentLang === 'az' ? 'Təcili Dəstək' : 'Soporte Urgente'}
               </h3>
               <a
-                href="tel:+15551234567"
+                href="tel:+15713159611"
                 className="btn-modern inline-flex items-center space-x-2 px-4 py-2 text-white rounded-lg font-semibold"
               >
                 <Phone className="w-4 h-4" />
                 <span>{currentLang === 'en' ? 'Call Now' : currentLang === 'az' ? 'Zəng Et' : 'Llamar'}</span>
+              </a>
+            </div>
+
+            {/* Website Link - NEW */}
+            <div className={`p-4 rounded-xl text-center ${
+              isDark 
+                ? 'glass-effect-dark border border-gray-700/50' 
+                : 'glass-effect border border-white/20 shadow-lg'
+            } ${isVisible ? 'animate-scale-in animate-with-delay-10' : 'animation-reset'}`}>
+              <div className="flex items-center justify-center mb-2">
+                <Globe className={`w-5 h-5 mr-2 ${isDark ? 'text-cyan-400' : 'text-cyan-500'}`} />
+                <h3 className={`font-bold ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}>
+                  Website
+                </h3>
+              </div>
+              <a
+                href="https://www.backbonix.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`text-sm font-medium transition-colors duration-300 hover:underline ${
+                  isDark ? 'text-cyan-400 hover:text-cyan-300' : 'text-cyan-600 hover:text-cyan-500'
+                }`}
+              >
+                www.backbonix.com
               </a>
             </div>
           </div>
