@@ -1,6 +1,6 @@
 // src/components/sections/Portfolio.tsx
 import React, { useState, useEffect } from 'react';
-import { Calendar, Users, Award, ChevronLeft, ChevronRight, Play, Pause, Target, Briefcase } from 'lucide-react';
+import { Calendar, Users, Award, ChevronLeft, ChevronRight, Target, Briefcase } from 'lucide-react';
 import type { Language } from '../../types';
 import { translations } from '../../i18n/translations';
 
@@ -106,10 +106,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isDark }) => 
     setCurrentProject((prev) => (prev - 1 + projects.length) % projects.length);
   };
 
-  const toggleAutoPlay = () => {
-    setIsAutoPlay(!isAutoPlay);
-  };
-
   return (
     <section 
       id="portfolio" 
@@ -196,26 +192,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({ currentLang, isDark }) => 
               ? 'glass-effect-dark border border-gray-700/50' 
               : 'glass-effect border border-white/20 shadow-xl'
           }`}>
-            
-            {/* Carousel Controls */}
-            <div className="absolute top-4 right-4 z-20 flex space-x-2">
-              <button
-                onClick={toggleAutoPlay}
-                className={`p-2 lg:p-3 rounded-lg transition-all duration-300 hover:scale-110 ${
-                  isDark 
-                    ? 'glass-effect-dark text-white hover:bg-gray-700' 
-                    : 'glass-effect text-gray-900 hover:bg-white shadow-lg'
-                }`}
-              >
-                {isAutoPlay ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-              </button>
-              
-              <div className={`px-3 py-2 lg:py-3 rounded-lg text-sm font-medium ${
-                isDark ? 'glass-effect-dark text-white' : 'glass-effect text-gray-900'
-              }`}>
-                {currentProject + 1} / {projects.length}
-              </div>
-            </div>
 
             {/* Project Content */}
             <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
