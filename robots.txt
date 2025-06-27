@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://backbonix.com/sitemap.xml
+
+# BackBonix Professional IT Services
+# Network Security, Infrastructure, Video Surveillance
