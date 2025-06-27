@@ -5,9 +5,17 @@ export default defineConfig({
   plugins: [react({
     jsxRuntime: 'automatic'
   })],
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  },
   esbuild: {
-    jsx: 'automatic',
-    jsxFactory: 'React.createElement',
-    jsxFragment: 'React.Fragment'
+    jsx: 'automatic'
   }
 })
